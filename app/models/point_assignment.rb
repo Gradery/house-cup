@@ -11,7 +11,7 @@
 #
 
 class PointAssignment < ActiveRecord::Base
-	has_one :staff
-	has_one :house
-	has_one :activity
+	belongs_to :staff
+	belongs_to :house
+	belongs_to :activity
 end
