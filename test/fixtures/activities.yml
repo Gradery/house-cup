@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: activities
+#
+#  id         :integer          not null, primary key
+#  name       :text
+#  points     :integer
+#  school_id  :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyText
+  points: 1
+  school_id: 1
+
+two:
+  name: MyText
+  points: 1
+  school_id: 1

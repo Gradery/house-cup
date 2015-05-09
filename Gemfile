@@ -27,7 +27,18 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+
+# Devise for user authentication
+gem 'devise'
+
+# Active Admin for the admin interface
+gem 'activeadmin', github: 'activeadmin'
+
+# Twitter Bootstrap
+gem 'bootstrap-sass', '~> 3.3.4'
+
+# annotate puts comments on the schema of the models
 
 # Use unicorn as the app server
 # gem 'unicorn'
