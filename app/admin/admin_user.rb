@@ -19,4 +19,20 @@ ActiveAdmin.register AdminUser do
     f.actions
   end
 
+  controller do
+    def scoped_collection
+      AdminUser.where(:school_id => current_admin_user.school_id).all
+    end
+
+    def update
+      params[:admin_user][:school_id] = current_admin_user.school_id
+      super
+    end
+
+    def create
+      params[:admin_user][:school_id] = current_admin_user.school_id
+      super
+    end
+  end
+
 end

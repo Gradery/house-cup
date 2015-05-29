@@ -1,0 +1,26 @@
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+	  <div class="form-group">
+    <label for="exampleInputEmail1">House</label>
+    <div class="row">
+        <% @houses.each do |h| %>
+    	<div class="col-xs-<%= @col_size %>">
+    		<a href="#" class="item">
+    			<img src="<%= h.image.url %>" class="img-responsive" id="<%= h.id %>" />
+    		</a>
+    	</div>
+        <% end %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Activity</label>
+    <select class="form-control" id="activity">
+        <option value="">- Select One -</option>
+        <% @activities.each do |a| %>
+    	<option value="<%= a.id %>"><%= a.name %></option>
+        <% end %>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-default form-control" id="submit">Submit</button>
+</div>
+</div>

@@ -36,9 +36,49 @@ $(document).ready(function(){
     });
 
     $("#submit").click(function(){
-    	$(".item img").removeClass("active");
-    	$("#activity").val("");
-    	toastr.success("Points Submitted");
+    	house = $(".active").attr("id");
+        activityId = $("#activity").val();
+        console.log(house + " - " + activityId);
+        if (house === undefined || activityId == "")
+            toastr.error("Please Select a House and Activity to Submit Points");
+        else
+        {
+            $.post("/long/score", {
+                house: house,
+                activity: activityId
+            })
+            .success(function(data){
+                $(".item img").removeClass("active");
+                $("#activity").val("");
+                toastr.success("Points Submitted");
+            })
+            .error(function(error){
+                console.log(error);
+                toastr.error("ERROR: Couldn't submit the points. Please try again later.")
+            })
+        }
+    });
+
+    //onboarding functions
+    $("#invite").click(function(){
+        studentId = $("#studentId").val();
+        name = $("#name").val();
+        if (studentId !== "")
+        {
+            $.post("/long/house/1", {
+                student_id: studentId,
+                name: name
+            })
+            .success(function(data){
+                $("#studentId").val("");
+                $("#name").val("");
+                toastr.success("Student Added!");
+            })
+            .error(function(error){
+                console.log(error);
+                toastr.error("ERROR: Couldn't add student. Please try again.")
+            })
+        }
     });
 });
 

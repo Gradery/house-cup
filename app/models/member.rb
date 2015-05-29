@@ -15,4 +15,6 @@
 class Member < ActiveRecord::Base
 	belongs_to :school
 	belongs_to :house
+
+	validates :badge_id, presence: true
 end

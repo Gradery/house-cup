@@ -12,4 +12,6 @@
 
 class Activity < ActiveRecord::Base
 	belongs_to :school
+
+	validates :name, :points, :school_id, presence: true
 end

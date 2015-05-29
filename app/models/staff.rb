@@ -16,6 +16,7 @@
 #  created_at             :datetime
 #  updated_at             :datetime
 #  school_id              :string(255)
+#  house_id               :integer
 #
 
 class Staff < ActiveRecord::Base
@@ -24,6 +25,14 @@ class Staff < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  validates :email, :school_id, :house_id, presence: true
+  validates :password, :password_confirmation, presence: true, on: :create
+  validates :password, confirmation: true
+
   belongs_to :school
   belongs_to :house
+
+  def to_s
+  	email
+  end
 end

@@ -1,0 +1,31 @@
+
+<div class="row">
+	<div class="col-xs-12">
+		<center>
+			<h2><%= @school.name %> House Cup Standings</h2>
+		</center>
+	</div>
+</div>
+<div class="row">
+<% i = 1
+@houses.each do |h| %>
+	<div class="col-xs-<%= 12/ @houses.count%>">
+		<center>
+			<img src="<%= h.image.url %>" class="img-responsive"/>
+			<div id="score-<%= i %>" class="score">
+		    <div class="outer">
+		        <div class="inner" data-progress="<%= (h.points.to_f / @max_score.to_f) * 100 %>%" style="background-color: <%= h.color %>">
+		        </div>        
+		    </div>
+			</div>
+			<b class="score"><%= h.points%> Points</b>
+		</center>
+	</div>
+	<% i = i + 1 %>
+<% end %>
+</div>
+<script type="text/javascript">
+	setTimeout(function(){
+		location.reload();
+	}, 60000);
+</script>

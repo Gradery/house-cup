@@ -16,6 +16,7 @@
 #  created_at             :datetime
 #  updated_at             :datetime
 #  school_id              :string(255)
+#  house_id               :integer
 #
 
 require 'test_helper'

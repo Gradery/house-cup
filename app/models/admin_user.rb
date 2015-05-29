@@ -15,6 +15,7 @@
 #  last_sign_in_ip        :string(255)
 #  created_at             :datetime
 #  updated_at             :datetime
+#  school_id              :integer
 #
 
 class AdminUser < ActiveRecord::Base
@@ -23,4 +24,6 @@ class AdminUser < ActiveRecord::Base
   devise :database_authenticatable, 
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :school
+
+  validates :school_id, presence: true
 end

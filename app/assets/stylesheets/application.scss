@@ -30,6 +30,14 @@ body { padding-top: 70px; }
 	color: white !important;
 }
 
+.navbar-default .navbar-nav > li > a {
+    text-decoration: none;
+}
+
+.navbar > .container-fluid .navbar-brand {
+    text-decoration: none;
+}
+
 .navbar-toggle, .navbar-toggle:hover, .navbar-toggle:active{
 	background-color: #f64035 !important;
 }
