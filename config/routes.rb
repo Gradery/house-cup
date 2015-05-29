@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   get ':school/house/:id' => 'page#invite'
   post ':school/house/:id' => 'page#doinvite'
 
+  get ':school/invite' => 'page#create_invite'
+  post ':school/invite' => 'page#do_create_invite'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

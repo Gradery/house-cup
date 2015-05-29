@@ -42,6 +42,13 @@ gem 'paperclip'
 # Twitter Bootstrap
 gem 'bootstrap-sass', '~> 3.3.4'
 
+# generate QR codes for onboarding/invites
+gem 'rqrcode'
+gem 'rqrcode_png'
+
+#debug helper
+gem "awesome_print"
+
 # annotate puts comments on the schema of the models
 
 # Use unicorn as the app server

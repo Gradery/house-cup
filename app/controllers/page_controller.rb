@@ -107,6 +107,40 @@ class PageController < ApplicationController
 		end
 	end
 
+	def create_invite
+		@school = get_school
+		if @school.nil?
+			raise ActionController::RoutingError.new('Not Found')
+		end
+	end
+
+	def do_create_invite
+		@school = get_school
+		if @school.nil?
+			raise ActionController::RoutingError.new('Not Found')
+		else
+			@houses = House.where(:school_id => @school.id).to_a
+			max_houses = @houses.count
+			@codes = Array.new
+			current_house = 0
+			o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
+			i = 0
+			while i < params['amount'].to_i do
+				ap i
+				random_string = (0...50).map { o[rand(o.length)] }.join
+				qr = RQRCode::QRCode.new( request.base_url + "/" + @school.url + "/house/" + @houses[current_house]["id"].to_s + "?noise=" + random_string, :size => 9, :level => :h )
+				@codes.push(qr.to_img)
+				if current_house == max_houses-1
+					current_house = 0
+				else
+					current_house = current_house + 1
+				end
+				i = i + 1
+			end
+
+		end
+	end
+
 	def get_school
 		if !params['school'].nil?
 			if School.where(:url => params['school'].downcase).exists?
