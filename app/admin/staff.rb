@@ -1,11 +1,11 @@
 ActiveAdmin.register Staff do
 
-permit_params :email, :school_id, :house_id, :password, :password_confirmation
+permit_params :email, :school_id, :house_id, :password, :password_confirmation, :grade
 
 index do
     selectable_column
-    id_column
     column :email
+    column :grade
     actions
   end
 
@@ -17,6 +17,7 @@ index do
       f.input :password if !resource.valid?
       f.input :password_confirmation if !resource.valid?
       f.input :house
+      f.input :grade, :collection => Setting.where(:school_id => current_admin_user.school_id.to_i, :key => "grades").first.value.split(",")
     end
     f.actions
   end

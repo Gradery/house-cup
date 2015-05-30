@@ -13,7 +13,7 @@
 		<center>
 			<img src="<%= h.image.url %>" class="img-responsive"/>
 			<div id="score-<%= i %>" class="score">
-		    <div class="outer">
+		    <div class="outer" style="height: 150px">
 		        <div class="inner" data-progress="<%= (h.points.to_f / @max_score.to_f) * 100 %>%" style="background-color: <%= h.color %>">
 		        </div>        
 		    </div>

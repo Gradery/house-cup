@@ -7,6 +7,7 @@
 #  created_at :datetime
 #  updated_at :datetime
 #  url        :string(255)
+#  about      :text
 #
 
 class School < ActiveRecord::Base

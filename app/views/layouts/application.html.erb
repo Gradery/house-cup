@@ -33,6 +33,7 @@
 	      		<li><a href="/">Home</a></li>
 	      	<% else %>
 	      		<li><a href="/<%= @school.url%>">Home</a></li>
+	      		<li><a href="/<%= @school.url%>/about">About</a></li>
 	      	<% end %>
 	        <% if current_staff.nil? %>
 	      		<li><a href="/staffs/sign_in">Login</a></li>

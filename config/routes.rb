@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   root 'page#index'
 
   get ':school' => 'page#show'
+  get ':school/about' => 'page#about'
 
   get ':school/score' => 'page#add'
   post ':school/score' => 'page#doadd'

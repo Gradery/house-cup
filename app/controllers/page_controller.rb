@@ -4,6 +4,13 @@ class PageController < ApplicationController
 		
 	end	
 
+	def about
+		@school = get_school
+		if @school.nil?
+			raise ActionController::RoutingError.new('Not Found')
+		end
+	end
+
 	def show
 		@school = get_school
 		if @school.nil?
