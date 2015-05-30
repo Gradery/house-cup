@@ -8,17 +8,17 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'page#index'
 
-  get ':school' => 'page#show'
-  get ':school/about' => 'page#about'
+  get '/hc/:school' => 'page#show'
+  get '/hc/:school/about' => 'page#about'
 
-  get ':school/score' => 'page#add'
-  post ':school/score' => 'page#doadd'
+  get '/hc/:school/score' => 'page#add'
+  post '/hc/:school/score' => 'page#doadd'
 
-  get ':school/house/:id' => 'page#invite'
-  post ':school/house/:id' => 'page#doinvite'
+  get '/hc/:school/house/:id' => 'page#invite'
+  post '/hc/:school/house/:id' => 'page#doinvite'
 
-  get ':school/invite' => 'page#create_invite'
-  post ':school/invite' => 'page#do_create_invite'
+  get '/hc/:school/invite' => 'page#create_invite'
+  post '/hc/:school/invite' => 'page#do_create_invite'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
