@@ -82,5 +82,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.default_url_options = { host: 'gradery.com', port: 80 }
-  config.action_controller.default_url_options = { host: 'gradery.com' }
+  config.action_controller.relative_url_root = "/hc"
 end

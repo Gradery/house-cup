@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :staffs
-  devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_for :staffs, path: '/hc/staffs'
+  devise_for :admin_users, path: '/hc/admin', ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
