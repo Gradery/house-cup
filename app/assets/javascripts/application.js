@@ -42,7 +42,7 @@ $(document).ready(function(){
             toastr.error("Please Select a House and Activity to Submit Points");
         else
         {
-            $.post("/long/score", {
+            $.post("/" + window.location.pathname, {
                 house: house,
                 activity: activityId
             })
@@ -64,7 +64,7 @@ $(document).ready(function(){
         name = $("#name").val();
         if (studentId !== "")
         {
-            $.post("/long/house/1", {
+            $.post("/" + window.location.pathname, {
                 student_id: studentId,
                 name: name
             })
