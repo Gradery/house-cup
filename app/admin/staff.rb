@@ -11,6 +11,7 @@ index do
   end
 
   filter :email
+  filter :house
 
   form do |f|
     f.inputs "Staff Details" do
