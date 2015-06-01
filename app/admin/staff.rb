@@ -24,7 +24,7 @@ index do
 
   controller do
     def scoped_collection
-      Staff.where(:school_id => current_admin_user.school_id).all
+      Staff.where(:school_id => current_admin_user.school_id.to_s).all
     end
   end
 
