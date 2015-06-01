@@ -11,7 +11,7 @@ index do
   end
 
   filter :email
-  filter :house
+  filter :house, :collection => proc { House.where(:school_id => current_admin_user.school_id).all }
 
   form do |f|
     f.inputs "Staff Details" do
