@@ -10,14 +10,14 @@ index do
 	actions
 end
 
-filter :house
+filter :house, :collection => proc{ House.where(:school_id => current_admin_user.school_id).all }
 filter :name
 filter :email
 filter :badge_id
 
 form do |f|
     f.inputs "Member" do
-      f.input :house
+      f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
       f.input :name
       f.input :email
       f.input :badge_id

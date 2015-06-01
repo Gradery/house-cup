@@ -16,7 +16,7 @@ index do
       f.input :email
       f.input :password if !resource.valid?
       f.input :password_confirmation if !resource.valid?
-      f.input :house
+      f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
       f.input :grade, :collection => Setting.where(:school_id => current_admin_user.school_id.to_i, :key => "grades").first.value.split(",")
     end
     f.actions

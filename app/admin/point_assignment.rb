@@ -9,15 +9,15 @@ index do
 	actions
 end
 
-filter :staff
-filter :house
-filter :activity
+filter :staff, :collection => proc { Staff.where(:school_id => current_admin_user.school_id).all }
+filter :house, :collection => proc { House.where(:school_id => current_admin_user.school_id).all }
+filter :activity, :collection => proc { Activity.where(:school_id => current_admin_user.school_id).all }
 
 form do |f|
     f.inputs "Point Assignment" do
       f.input :staff
-      f.input :house
-      f.input :activity
+      f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
+      f.input :activity, :collection => Activity.where(:school_id => current_admin_user.school_id).all
     end
     f.actions
   end
