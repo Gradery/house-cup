@@ -5,6 +5,7 @@ permit_params :email, :school_id, :house_id, :password, :password_confirmation, 
 index do
     selectable_column
     column :email
+    column :house
     column :grade
     actions
   end
