@@ -1,0 +1,10 @@
+<div class="row">
+	<h3>Welcome to the Gradery House Cup system. Select your school from the list below</h3>
+</div>
+<div class="row">
+	<% @schools.each do |s| %>
+		<div class="col-xs-12">
+			<center><h4><a href="/<%= s.url %>"><%= s.name %></a></h4></center>
+		</div>
+	<% end %>
+</div>

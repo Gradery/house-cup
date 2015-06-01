@@ -1,7 +1,7 @@
 class PageController < ApplicationController
 
 	def index
-		
+		@schools = School.all.to_a
 	end	
 
 	def about
