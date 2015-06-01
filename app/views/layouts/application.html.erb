@@ -38,7 +38,9 @@
 	        <% if current_staff.nil? %>
 	      		<li><a href="/staffs/sign_in">Login</a></li>
 	      	<% else %>
+	      	    <% if !@school.nil? %>
 	      		<li><a href="/<%= @school.url%>/score">Score</a></li>
+	      		<% end %>
 	      		<li><a href="/staffs/edit">My Profile</a></li>
 	      	<% end %>
 	      </ul>
