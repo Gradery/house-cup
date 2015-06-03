@@ -12,6 +12,16 @@
 	<div class="col-xs-<%= 12/ @houses.count%>">
 		<center>
 			<img src="<%= h.image.url %>" class="img-responsive"/>
+		</center>
+	</div>
+	<% i = i + 1 %>
+<% end %>
+</div>
+<div class="row">
+<% i = 1
+@houses.each do |h| %>
+	<div class="col-xs-<%= 12/ @houses.count%>">
+		<center>
 			<div id="score-<%= i %>" class="score">
 		    <div class="outer" style="height: 150px">
 		        <div class="inner" data-progress="<%= (h.points.to_f / @max_score.to_f) * 100 %>%" style="background-color: <%= h.color %>">
