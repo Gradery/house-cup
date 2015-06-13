@@ -36,6 +36,7 @@ gem 'devise'
 # Active Admin for the admin interface
 gem 'activeadmin', github: 'activeadmin'
 gem 'active_admin_editor'
+gem 'chart-js-rails'
 
 # paperclip for file upload for logos
 gem 'paperclip'
