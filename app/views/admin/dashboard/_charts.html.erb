@@ -1,7 +1,7 @@
 <% houses = House.where(:school_id => current_admin_user.school_id.to_s).all %>
 <% activities = Activity.where(:school_id => current_admin_user.school_id.to_s).all %>
 <% staff = Staff.where(:school_id => current_admin_user.school_id).all %>
-<div>
+<div style="min-width: 100%; float: left">
 	<center><h2>Activities In Each House</h2></center>
 	<% houses.each do |h| %>
 		<div style="width: 50%; float: left">
@@ -10,7 +10,7 @@
 		</div>
 	<% end %>
 </div>
-<div>
+<div style="min-width: 100%; float: left">
 	<center><h2>Activities Reported By Staff</h2></center>
 	<% staff.each do |s| %>
 		<div style="width: 50%; float: left">
@@ -20,7 +20,7 @@
 	<% end %>
 </div>
 
-<div>
+<div style="min-width: 100%; float: left">
 	<center><h2>Points Given To House By Staff</h2></center>
 	<% staff.each do |s| %>
 		<div style="width: 50%; float: left">
@@ -28,6 +28,13 @@
 			<div id="staffpoints-<%= s.id %>" style="width:100%;height:300px"></div>
 		</div>
 	<% end %>
+</div>
+
+<div style="min-width: 100%; float: left">
+	<center><h2>Who Gives Out The Most Points?</h2></center>
+		<div>
+			<div id="mostpoints" style="width:100%;height:300px"></div>
+		</div>
 </div>
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/js/flot/excanvas.min.js"></script><![endif]-->
 <script type="text/javascript" src="/js/flot/jquery.flot.min.js"></script>
@@ -80,7 +87,28 @@
 				}
 			);
 		<% end %>
-	    };
+			$.plot("#mostpoints",
+				[
+					<% staff.each do |s| 
+						points = PointAssignment.where(:staff_id => s.id).all.map{ |p| p.activity.points}.sum %>
+						{label: "<%= s.email %>", data: <%= points %>},
+					<% end %>
+				], {
+					series: {
+						pie: {
+							show: true,
+							combine: {
+				                color: '#999',
+				                threshold: 0.1
+				            }
+						}
+					},
+					legend: {
+						show: false
+					}
+				}
+			);
+		};
 	    $(window).trigger('resize');
 	});
 </script>
