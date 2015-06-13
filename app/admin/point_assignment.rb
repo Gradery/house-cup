@@ -15,7 +15,7 @@ filter :activity, :collection => proc { Activity.where(:school_id => current_adm
 
 form do |f|
     f.inputs "Point Assignment" do
-      f.input :staff
+      f.input :staff, :collection => Staff.where(:school_id => current_admin_user.school_id).all
       f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
       f.input :activity, :collection => Activity.where(:school_id => current_admin_user.school_id).all
     end
