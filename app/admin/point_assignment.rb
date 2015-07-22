@@ -9,13 +9,13 @@ index do
 	actions
 end
 
-filter :staff, :collection => proc { Staff.where(:school_id => current_admin_user.school_id).all }
+filter :staff, :collection => proc { Staff.where(:school_id => current_admin_user.school_id.to_s).all }
 filter :house, :collection => proc { House.where(:school_id => current_admin_user.school_id).all }
 filter :activity, :collection => proc { Activity.where(:school_id => current_admin_user.school_id).all }
 
 form do |f|
     f.inputs "Point Assignment" do
-      f.input :staff, :collection => Staff.where(:school_id => current_admin_user.school_id).all
+      f.input :staff, :collection => Staff.where(:school_id => current_admin_user.school_id.to_s).all
       f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
       f.input :activity, :collection => Activity.where(:school_id => current_admin_user.school_id).all
     end
