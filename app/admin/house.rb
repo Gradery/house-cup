@@ -39,4 +39,10 @@ controller do
 	  end
   end
 
+  csv do
+    column :name
+    column :points
+    column :color
+  end
+
 end

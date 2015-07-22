@@ -41,4 +41,10 @@ controller do
 	  end
   end
 
+csv do
+  column(:house) { |assignment| assignment.house.name}
+  column :badge_id
+  column :name
+end
+
 end

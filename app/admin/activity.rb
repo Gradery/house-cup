@@ -43,4 +43,9 @@ controller do
     end
 end
 
+csv do
+  column :name
+  column :points
+end
+
 end

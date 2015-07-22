@@ -28,4 +28,10 @@ controller do
     end
   end
 
+  csv do
+    column (:staff) {|assignment| assignment.staff.email}
+    column (:house) {|assignment| assignment.house.name}
+    column (:activity) {|assignment| assignment.activity.name}
+  end
+
 end

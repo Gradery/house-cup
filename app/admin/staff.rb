@@ -41,4 +41,9 @@ index do
     end
   end
 
+  csv do
+    column :email
+    column (:house) {|staff| staff.house.name}
+  end
+
 end
