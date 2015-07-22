@@ -6,12 +6,13 @@ index do
 	column :staff
 	column :house
 	column :activity
-	actions
+  actions
 end
 
 filter :staff, :collection => proc { Staff.where(:school_id => current_admin_user.school_id.to_s).all }
 filter :house, :collection => proc { House.where(:school_id => current_admin_user.school_id).all }
 filter :activity, :collection => proc { Activity.where(:school_id => current_admin_user.school_id).all }
+filter :school, :collection => proc { School.all }, if: proc{ current_admin_user.school_id.nil?}
 
 form do |f|
     f.inputs "Point Assignment" do
@@ -24,7 +25,11 @@ form do |f|
 
 controller do
     def scoped_collection
-      PointAssignment.includes(:house).where("houses.school_id" => current_admin_user.school_id).all
+      if !current_admin_user.school_id.nil?
+        PointAssignment.includes(:house).where("houses.school_id" => current_admin_user.school_id).all
+      else
+        PointAssignment.all
+      end
     end
   end
 

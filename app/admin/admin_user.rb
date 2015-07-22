@@ -9,28 +9,38 @@ ActiveAdmin.register AdminUser do
   end
 
   filter :email
+  filter :school, :collection => proc { School.all }, if: proc{ current_admin_user.school_id.nil?}
 
   form do |f|
     f.inputs "Admin Details" do
       f.input :email
       f.input :password
       f.input :password_confirmation
+      f.input :school, :collection => School.all if current_admin_user.school_id.nil?
     end
     f.actions
   end
 
   controller do
     def scoped_collection
-      AdminUser.where(:school_id => current_admin_user.school_id).all
+      if !current_admin_user.school_id.nil?
+        AdminUser.where(:school_id => current_admin_user.school_id).all
+      else
+        AdminUser.all
+      end
     end
 
     def update
-      params[:admin_user][:school_id] = current_admin_user.school_id
+      if !current_admin_user.school_id.nil?
+        params[:admin_user][:school_id] = current_admin_user.school_id
+      end
       super
     end
 
     def create
-      params[:admin_user][:school_id] = current_admin_user.school_id
+      if !current_admin_user.school_id.nil?
+        params[:admin_user][:school_id] = current_admin_user.school_id
+      end
       super
     end
   end

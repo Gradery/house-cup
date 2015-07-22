@@ -17,7 +17,11 @@ form do |f|
 
 controller do
   def scoped_collection
-    School.where(:id => current_admin_user.school_id).all
+    if !current_admin_user.school_id.nil?
+      School.where(:id => current_admin_user.school_id).all
+    else
+      School.all
+    end
   end
 end
 

@@ -7,13 +7,15 @@ index do
 	column :name
 	column :badge_id
 	column :email
+  column (:school) {|activity| activity.school.name} if current_admin_user.school_id.nil?
 	actions
 end
 
-filter :house, :collection => proc{ House.where(:school_id => current_admin_user.school_id).all }
+filter :house, :collection => proc{ House.where(:school_id => current_admin_user.school_id).all }, if: proc{ !current_admin_user.school_id.nil?}
 filter :name
 filter :email
 filter :badge_id
+filter :school, :collection => proc { School.all }, if: proc{ current_admin_user.school_id.nil?}
 
 form do |f|
     f.inputs "Member" do
@@ -21,22 +23,31 @@ form do |f|
       f.input :name
       f.input :email
       f.input :badge_id
+      f.input :school, :collection => School.all if current_admin_user.school_id.nil?
     end
     f.actions
   end
 
 controller do
     def scoped_collection
-      Member.where(:school_id => current_admin_user.school_id).all
+      if !current_admin_user.school_id.nil?
+        Member.where(:school_id => current_admin_user.school_id).all
+      else
+        Member.all
+      end
     end
 
     def update
-	    params[:member][:school_id] = current_admin_user.school_id
+	    if !current_admin_user.school_id.nil?
+        params[:member][:school_id] = current_admin_user.school_id
+      end
 	    super
 	  end
 
 	  def create
-	    params[:member][:school_id] = current_admin_user.school_id
+	    if !current_admin_user.school_id.nil?
+        params[:member][:school_id] = current_admin_user.school_id
+      end
 	    super
 	  end
   end

@@ -13,11 +13,13 @@ end
 index do
 	column :name
 	column :points
+  column (:school) {|activity| activity.school.name} if current_admin_user.school_id.nil?
 	actions
 end
 
 filter :name
 filter :points
+filter :school, :collection => proc { School.all }, if: proc{ current_admin_user.school_id.nil?}
 
 form do |f|
     f.inputs "Activity" do
@@ -29,16 +31,24 @@ form do |f|
 
 controller do
 	def scoped_collection
-		Activity.where(:school_id => current_admin_user.school_id).all
+    if !current_admin_user.school_id.nil?
+		  Activity.where(:school_id => current_admin_user.school_id).all
+    else
+      Activity.all
+    end
 	end
 
 	def update
-      params[:activity][:school_id] = current_admin_user.school_id
+      if !current_admin_user.school_id.nil?
+        params[:activity][:school_id] = current_admin_user.school_id
+      end
       super
     end
 
     def create
-      params[:activity][:school_id] = current_admin_user.school_id
+      if !current_admin_user.school_id.nil?
+        params[:activity][:school_id] = current_admin_user.school_id
+      end
       super
     end
 end
