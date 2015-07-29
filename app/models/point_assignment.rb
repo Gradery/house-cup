@@ -11,6 +11,8 @@
 #
 
 class PointAssignment < ActiveRecord::Base
+	acts_as_paranoid
+	
 	belongs_to :staff
 	belongs_to :house
 	belongs_to :activity

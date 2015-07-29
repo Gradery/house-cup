@@ -142,6 +142,8 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.3)
       mime-types
+    paranoia (2.1.0)
+      activerecord (~> 4.0)
     pg (0.18.1)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
@@ -234,6 +236,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   paperclip
+  paranoia (~> 2.0)
   pg
   rails (= 4.1.1)
   rqrcode

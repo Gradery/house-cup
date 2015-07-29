@@ -13,6 +13,8 @@
 #
 
 class Member < ActiveRecord::Base
+	acts_as_paranoid
+	
 	belongs_to :school
 	belongs_to :house
 

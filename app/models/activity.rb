@@ -11,6 +11,8 @@
 #
 
 class Activity < ActiveRecord::Base
+	acts_as_paranoid
+	
 	belongs_to :school
 
 	validates :name, :points, :school_id, presence: true

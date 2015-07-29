@@ -11,6 +11,8 @@
 #
 
 class Setting < ActiveRecord::Base
+	acts_as_paranoid
+	
 	belongs_to :school
 
 	validates :key, :value, :school_id, presence: true

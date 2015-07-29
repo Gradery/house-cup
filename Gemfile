@@ -6,6 +6,8 @@ gem 'rails', '4.1.1'
 # Use postgres as the database for Active Record
 gem 'pg'
 gem 'sqlite3'
+# Utilize paranoia, which enables soft delets in Active Record
+gem "paranoia", "~> 2.0"
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets

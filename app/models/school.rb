@@ -11,6 +11,8 @@
 #
 
 class School < ActiveRecord::Base
+	acts_as_paranoid
+	
 	has_many :houses
 	has_many :staff
 	has_many :members

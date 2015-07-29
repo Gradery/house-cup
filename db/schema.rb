@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150531161314) do
+ActiveRecord::Schema.define(version: 20150729141323) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -34,7 +34,10 @@ ActiveRecord::Schema.define(version: 20150531161314) do
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
+
+  add_index "activities", ["deleted_at"], name: "index_activities_on_deleted_at"
 
   create_table "admin_users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -50,8 +53,10 @@ ActiveRecord::Schema.define(version: 20150531161314) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "school_id"
+    t.datetime "deleted_at"
   end
 
+  add_index "admin_users", ["deleted_at"], name: "index_admin_users_on_deleted_at"
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
 
@@ -66,7 +71,10 @@ ActiveRecord::Schema.define(version: 20150531161314) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.datetime "deleted_at"
   end
+
+  add_index "houses", ["deleted_at"], name: "index_houses_on_deleted_at"
 
   create_table "members", force: true do |t|
     t.integer  "school_id"
@@ -76,7 +84,10 @@ ActiveRecord::Schema.define(version: 20150531161314) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
+
+  add_index "members", ["deleted_at"], name: "index_members_on_deleted_at"
 
   create_table "point_assignments", force: true do |t|
     t.integer  "staff_id"
@@ -84,7 +95,10 @@ ActiveRecord::Schema.define(version: 20150531161314) do
     t.integer  "activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
+
+  add_index "point_assignments", ["deleted_at"], name: "index_point_assignments_on_deleted_at"
 
   create_table "schools", force: true do |t|
     t.string   "name"
@@ -92,7 +106,10 @@ ActiveRecord::Schema.define(version: 20150531161314) do
     t.datetime "updated_at"
     t.string   "url"
     t.text     "about"
+    t.datetime "deleted_at"
   end
+
+  add_index "schools", ["deleted_at"], name: "index_schools_on_deleted_at"
 
   create_table "settings", force: true do |t|
     t.string   "key"
@@ -100,7 +117,10 @@ ActiveRecord::Schema.define(version: 20150531161314) do
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "deleted_at"
   end
+
+  add_index "settings", ["deleted_at"], name: "index_settings_on_deleted_at"
 
   create_table "staffs", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -118,8 +138,10 @@ ActiveRecord::Schema.define(version: 20150531161314) do
     t.string   "school_id"
     t.integer  "house_id"
     t.string   "grade"
+    t.datetime "deleted_at"
   end
 
+  add_index "staffs", ["deleted_at"], name: "index_staffs_on_deleted_at"
   add_index "staffs", ["email"], name: "index_staffs_on_email", unique: true
   add_index "staffs", ["reset_password_token"], name: "index_staffs_on_reset_password_token", unique: true
 

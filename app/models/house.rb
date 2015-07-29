@@ -16,6 +16,8 @@
 #
 
 class House < ActiveRecord::Base
+	acts_as_paranoid
+	
 	belongs_to :school
 	has_many :members
 	has_many :staff
