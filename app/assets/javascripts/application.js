@@ -55,7 +55,10 @@ $(document).ready(function(){
             })
             .error(function(error){
                 console.log(error);
-                toastr.error("ERROR: Couldn't submit the points. Please try again later.")
+                if (error.status == 400)
+                    toastr.error(error.responseJSON.error);
+                else
+                    toastr.error("ERROR: Couldn't submit the points. Please try again later.");
             })
         }
     });

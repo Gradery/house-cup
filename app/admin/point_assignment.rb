@@ -6,6 +6,7 @@ index do
 	column :staff
 	column :house
 	column :activity
+  column :created_at
   actions
 end
 

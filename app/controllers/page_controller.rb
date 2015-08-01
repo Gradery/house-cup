@@ -65,16 +65,42 @@ class PageController < ApplicationController
 				@activity = Activity.find(params['activity'])
 				if @activity.nil?
 					render json: {error: "Activity ID is required"}, status: 401
-				else #we're good to set the points
-					p = PointAssignment.new
-					p.staff = current_staff
-					p.activity = @activity
-					p.house = @house
-					p.save!
-					# change the points in the house
-					@house.points += @activity.points
-					@house.save!
-					render json: {success: true}
+				else #we're good to set the points, check if we're rate limiting
+					can_add = false
+					if Setting.where(:key => "rate-limit", :school => @school).exists? && 
+						Setting.where(:key => "rate-limit", :school => @school).first.value.downcase == "true" && 
+						Setting.where(:key => "rate-limit-reset-minutes", :school => @school).exists? && 
+						Setting.where(:key => "rate-limit-max-points", :school => @school).exists?
+						check_minutes = Setting.where(:key => "rate-limit-reset-minutes", :school => @school).first.value.to_i
+						check_max_points = Setting.where(:key => "rate-limit-max-points", :school => @school).first.value.to_i
+						# get all the submissions by this user in the last check_minutes minutes
+						assignments = PointAssignment.where(:staff => current_staff).where("created_at >= ?", DateTime.now - check_minutes.minutes).all
+						# go through these and sum up the points in them
+						total_points = 0
+						assignments.each do |a|
+							total_points += a.activity.points
+						end
+						if total_points + @activity.points >= check_max_points #can't add
+							can_add = false
+						else
+							can_add = true
+						end 
+					else #rate limit var not set, assume it's false
+						can_add = true
+					end
+					if can_add
+						p = PointAssignment.new
+						p.staff = current_staff
+						p.activity = @activity
+						p.house = @house
+						p.save!
+						# change the points in the house
+						@house.points += @activity.points
+						@house.save!
+						render json: {success: true}
+					else
+						render json: {error: "You must wait "+check_minutes.to_s+" more minutes before adding more points"}, status: 400
+					end
 				end
 			end
 		end
