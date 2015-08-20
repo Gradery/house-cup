@@ -29,6 +29,17 @@ class PageController < ApplicationController
 			end
 			@max_score += 10
 			puts @max_score
+			# Get the setting to whether to show house names in text or not
+			if Setting.where(:school => @school, :key => "show-house-text-names").exists?
+				temp = Setting.where(:school => @school, :key => "show-house-text-names").first.value
+				if temp.downcase == "true"
+					@showHouseTextNames = true
+				else
+					@showHouseTextNames = false
+				end
+			else
+				@showHouseTextNames = false
+			end
 		end
 	end
 
@@ -44,12 +55,19 @@ class PageController < ApplicationController
 			else
 				@houses = House.where(:school_id => @school.id).to_a
 				@activities = Activity.where(:school_id => @school.id).to_a
-				# determine column size
-				if (@houses.count/3).even?
-					@col_size = 3
+				@col_size = 6
+			end
+
+			# Get the setting to whether to show house names in text or not
+			if Setting.where(:school => @school, :key => "show-house-text-names").exists?
+				temp = Setting.where(:school => @school, :key => "show-house-text-names").first.value
+				if temp.downcase == "true"
+					@showHouseTextNames = true
 				else
-					@col_size = 6
+					@showHouseTextNames = false
 				end
+			else
+				@showHouseTextNames = false
 			end
 		end
 	end

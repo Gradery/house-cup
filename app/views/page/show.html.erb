@@ -12,6 +12,10 @@
 	<div class="col-xs-<%= 12/ @houses.count%>">
 		<center>
 			<img src="<%= h.image.url %>" class="img-responsive"/>
+			<% if @showHouseTextNames %>
+				<br/>
+				<h3><%= h.name %></h3>
+			<% end %>
 		</center>
 	</div>
 	<% i = i + 1 %>

@@ -6,7 +6,13 @@
         <% @houses.each do |h| %>
     	<div class="col-xs-<%= @col_size %>">
     		<a href="#" class="item">
-    			<img src="<%= h.image.url %>" class="img-responsive" id="<%= h.id %>" />
+    			<center>
+                    <img src="<%= h.image.url %>" class="img-responsive" id="<%= h.id %>" />
+                    <% if @showHouseTextNames %>
+                        <br/>
+                        <h3><%= h.name %></h3>
+                    <% end %>
+                </center>
     		</a>
     	</div>
         <% end %>
