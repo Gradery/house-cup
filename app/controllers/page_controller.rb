@@ -185,8 +185,8 @@ class PageController < ApplicationController
 		else
 			@backgroundColor = "#FFF"
 		end
-		if Setting.where(:school => @school, :key => "foreground-color").exists?
-			@foregroundColor = Setting.where(:school => @school, :key => "foreground-color").first.value
+		if Setting.where(:school => @school, :key => "navbar-foreground-color").exists?
+			@foregroundColor = Setting.where(:school => @school, :key => "navbar-foreground-color").first.value
 		else
 			@foregroundColor = "#000"
 		end
