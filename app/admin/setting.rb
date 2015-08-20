@@ -5,6 +5,7 @@ permit_params :school_id, :key, :value
 index do
 	column :key
 	column :value
+  column :school, if: proc{ current_admin_user.school_id.nil?}
 	actions
 end
 

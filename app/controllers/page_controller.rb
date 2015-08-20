@@ -18,6 +18,8 @@ class PageController < ApplicationController
 		else
 			# get the houses
 			@houses = House.where(:school_id => @school.id).to_a
+			# sort the houses
+			@houses = @houses.sort_by {|h| h[:name].downcase }
 			#find the highest score
 			@max_score = 1
 			@houses.each do |h|
@@ -172,6 +174,47 @@ class PageController < ApplicationController
 			end
 
 		end
+	end
+
+	def stylesheet
+		@school = get_school
+
+		# see if they branded their site
+		if Setting.where(:school => @school, :key => "background-color").exists?
+			@backgroundColor = Setting.where(:school => @school, :key => "background-color").first.value
+		else
+			@backgroundColor = "#FFF"
+		end
+		if Setting.where(:school => @school, :key => "foreground-color").exists?
+			@foregroundColor = Setting.where(:school => @school, :key => "foreground-color").first.value
+		else
+			@foregroundColor = "#000"
+		end
+		if Setting.where(:school => @school, :key => "button-color").exists?
+			@buttonColor = Setting.where(:school => @school, :key => "button-color").first.value
+		else
+			@buttonColor = "#EB9939"
+		end
+		if Setting.where(:school => @school, :key => "navbar-background-color").exists?
+			@navbarBackgroundColor = Setting.where(:school => @school, :key => "navbar-background-color").first.value
+		else
+			@navbarBackgroundColor = "#BDDFCA"
+		end
+		if Setting.where(:school => @school, :key => "text-color").exists?
+			@textColor = Setting.where(:school => @school, :key => "text-color").first.value
+		else
+			@textColor = "#000"
+		end
+
+
+		filename = 'stylesheet.css'
+
+	    extname = File.extname(filename)[1..-1]
+	    mime_type = Mime::Type.lookup_by_extension(extname)
+	    content_type = mime_type.to_s unless mime_type.nil?
+
+	    headers['Content-Type'] = content_type
+	    render :layout => false
 	end
 
 	def get_school

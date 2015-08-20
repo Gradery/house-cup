@@ -22,7 +22,10 @@ class House < ActiveRecord::Base
 	has_many :members
 	has_many :staff
 
-	has_attached_file :image, :default_url => "/img/:style/missing.png"
+	has_attached_file :image, :default_url => "/img/:style/missing.png",
+				  :styles => {thumbnail: "1000x1000#"},
+                  :default_style => :thumbnail, 
+                  :content_type => { :content_type => ["image/jpeg", "image/gif", "image/png"] }
   	validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
   	validates :name, :color, :points, :school_id, presence: true

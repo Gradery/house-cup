@@ -26,5 +26,5 @@ class AdminUser < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :school
 
-  validates :school_id, presence: true
+  #validates :school_id, presence: true
 end
