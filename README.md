@@ -16,8 +16,6 @@ We are open to any suggestions or additional features! Please either create an i
 
 ## TODO
 
-Ability to rate limit positive and negative values separately
-
 Main House Cup Landing/Marketing page
 
 Auto account creation / payment processing integration
