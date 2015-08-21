@@ -16,10 +16,17 @@ We are open to any suggestions or additional features! Please either create an i
 
 ## TODO
 
-Theming and experience customization: allows schools to customize the colors on the site.
-
-Ability to customize metrics shown on dashboard
+Ability to rate limit positive and negative values separately
 
 Main House Cup Landing/Marketing page
 
 Auto account creation / payment processing integration
+
+Documentation and Tutorial Videos
+
+Coming in Version 2.0:
+* Option to add points to a specific student
+* Export reports on student behavior
+* Ability to add custom points
+* Add optional notes section to explain details of what happened.
+* Option to enter custom point values
