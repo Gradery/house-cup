@@ -22,6 +22,8 @@ Auto account creation / payment processing integration
 
 Documentation and Tutorial Videos
 
+Automated Tests
+
 Coming in Version 2.0:
 * Option to add points to a specific student
 * Export reports on student behavior

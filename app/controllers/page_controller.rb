@@ -101,9 +101,13 @@ class PageController < ApplicationController
 						# go through these and sum up the points in them if they are on the correct side of 0
 						total_points = 0
 						assignments.each do |a|
-							total_points += a.activity.points
+							if @activity.points > 0 #positive points only
+								total_points += a.activity.points if a.activity.point > 0
+							else #negative points only
+								total_points += a.activity.points if a.activity.point < 0
+							end
 						end
-						if (total_points + @activity.points).abs >= check_max_points.abs #can't add
+						if (total_points + @activity.points).abs > check_max_points.abs #can't add
 							can_add = false
 						else
 							can_add = true
@@ -119,6 +123,9 @@ class PageController < ApplicationController
 						p.save!
 						# change the points in the house
 						@house.points += @activity.points
+						if @house.points < 0
+							@house.points = 0
+						end
 						@house.save!
 						render json: {success: true}
 					else

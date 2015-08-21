@@ -32,8 +32,8 @@ $(document).ready(function(){
     animate($("#score-6"));
 
     $(".item").click(function(){
-    	$(".item img").removeClass("active");
-    	$(this).children().addClass("active");
+    	$(".active").removeClass("active");
+    	$(this).find("img").addClass("active");
     });
 
     $("#submit").click(function(){

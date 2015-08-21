@@ -25,6 +25,7 @@ form do |f|
     f.inputs "Activity" do
       f.input :name
       f.input :points
+      f.input :school, :collection => School.all if current_admin_user.school_id.nil?
     end
     f.actions
   end
