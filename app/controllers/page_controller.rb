@@ -1,7 +1,7 @@
 class PageController < ApplicationController
 
 	def index
-		@schools = School.all.to_a
+		@schools = School.all.to_a.sort_by{|h| h[:name]}
 	end	
 
 	def about
