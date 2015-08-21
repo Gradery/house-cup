@@ -88,19 +88,22 @@ class PageController < ApplicationController
 				else #we're good to set the points, check if we're rate limiting
 					can_add = false
 					if Setting.where(:key => "rate-limit", :school => @school).exists? && 
-						Setting.where(:key => "rate-limit", :school => @school).first.value.downcase == "true" && 
-						Setting.where(:key => "rate-limit-reset-minutes", :school => @school).exists? && 
-						Setting.where(:key => "rate-limit-max-points", :school => @school).exists?
-						check_minutes = Setting.where(:key => "rate-limit-reset-minutes", :school => @school).first.value.to_i
-						check_max_points = Setting.where(:key => "rate-limit-max-points", :school => @school).first.value.to_i
+					   Setting.where(:key => "rate-limit", :school => @school).first.value.downcase == "true"
+						if @activity.points > 0 #positive points
+							check_minutes = Setting.where(:key => "rate-limit-positive-reset-minutes", :school => @school).first.value.to_i
+							check_max_points = Setting.where(:key => "rate-limit-max-positive-points", :school => @school).first.value.to_i
+						else
+							check_minutes = Setting.where(:key => "rate-limit-negative-reset-minutes", :school => @school).first.value.to_i
+							check_max_points = Setting.where(:key => "rate-limit-max-negative-points", :school => @school).first.value.to_i
+						end
 						# get all the submissions by this user in the last check_minutes minutes
 						assignments = PointAssignment.where(:staff => current_staff).where("created_at >= ?", DateTime.now - check_minutes.minutes).all
-						# go through these and sum up the points in them
+						# go through these and sum up the points in them if they are on the correct side of 0
 						total_points = 0
 						assignments.each do |a|
 							total_points += a.activity.points
 						end
-						if total_points + @activity.points >= check_max_points #can't add
+						if (total_points + @activity.points).abs >= check_max_points.abs #can't add
 							can_add = false
 						else
 							can_add = true
