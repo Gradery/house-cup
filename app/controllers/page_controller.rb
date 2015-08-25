@@ -102,9 +102,9 @@ class PageController < ApplicationController
 						total_points = 0
 						assignments.each do |a|
 							if @activity.points > 0 #positive points only
-								total_points += a.activity.points if a.activity.point > 0
+								total_points += a.activity.points if a.activity.points > 0
 							else #negative points only
-								total_points += a.activity.points if a.activity.point < 0
+								total_points += a.activity.points if a.activity.points < 0
 							end
 						end
 						if (total_points + @activity.points).abs > check_max_points.abs #can't add
