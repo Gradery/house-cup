@@ -16,6 +16,7 @@
 #  created_at             :datetime
 #  updated_at             :datetime
 #  school_id              :integer
+#  deleted_at             :datetime
 #
 
 require 'test_helper'

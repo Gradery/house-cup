@@ -8,6 +8,9 @@
 #  activity_id :integer
 #  created_at  :datetime
 #  updated_at  :datetime
+#  deleted_at  :datetime
+#  note        :text
+#  member_id   :integer
 #
 
 require 'test_helper'

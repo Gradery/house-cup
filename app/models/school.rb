@@ -8,6 +8,7 @@
 #  updated_at :datetime
 #  url        :string(255)
 #  about      :text
+#  deleted_at :datetime
 #
 
 class School < ActiveRecord::Base
