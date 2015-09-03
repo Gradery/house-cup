@@ -1,10 +1,11 @@
 ActiveAdmin.register Member do
 
-permit_params :school_id, :house_id, :email, :name, :badge_id
+permit_params :school_id, :house_id, :email, :name, :badge_id, :grade
 
 index do
 	column :house
 	column :name
+  column :grade
 	column :badge_id
 	column :email
   column (:school) {|activity| activity.school.name} if current_admin_user.school_id.nil?
@@ -13,6 +14,7 @@ end
 
 filter :house, :collection => proc{ House.where(:school_id => current_admin_user.school_id).all }, if: proc{ !current_admin_user.school_id.nil?}
 filter :name
+filter :grade
 filter :email
 filter :badge_id
 filter :school, :collection => proc { School.all }, if: proc{ current_admin_user.school_id.nil?}
@@ -21,6 +23,7 @@ form do |f|
     f.inputs "Member" do
       f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
       f.input :name
+      f.input :grade, :collection => Setting.where(:school_id => 1, :key => "grades").first.value.split(",").delete_if{|a| a.downcase == "other"}
       f.input :email
       f.input :badge_id
       f.input :school, :collection => School.all if current_admin_user.school_id.nil?

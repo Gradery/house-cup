@@ -21,6 +21,7 @@ form do |f|
       f.input :staff, :collection => Staff.where(:school_id => current_admin_user.school_id.to_s).all
       f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
       f.input :activity, :collection => Activity.where(:school_id => current_admin_user.school_id).all
+      f.input :note if Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").first.value.downcase == "true"
     end
     f.actions
   end
@@ -39,6 +40,7 @@ controller do
     column (:staff) {|assignment| assignment.staff.email}
     column (:house) {|assignment| assignment.house.name}
     column (:activity) {|assignment| assignment.activity.name}
+    column :note if Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").first.value.downcase == "true"
   end
 
 end
