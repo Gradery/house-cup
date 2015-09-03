@@ -55,7 +55,15 @@ class PageController < ApplicationController
 			else
 				@houses = House.where(:school_id => @school.id).to_a
 				@activities = Activity.where(:school_id => @school.id).to_a
-				@col_size = 6
+				if @houses.count % 2 == 0 #even
+					@col_size_xs = 6
+					@col_size_sm = 2
+					@col_size_md = 2
+				else #odd
+					@col_size_xs = 4
+					@col_size_sm = 4
+					@col_size_md = 4
+				end
 			end
 
 			# Get the setting to whether to show house names in text or not
@@ -68,6 +76,18 @@ class PageController < ApplicationController
 				end
 			else
 				@showHouseTextNames = false
+			end
+
+			# see if we need to show the note section
+			if Setting.where(:school => @school, :key => "show-note-section").exists?
+				temp = Setting.where(:school => @school, :key => "show-note-section").first.value
+				if temp.downcase == "true"
+					@show_note = true
+				else
+					@show_note = false
+				end
+			else
+				@show_note = false
 			end
 		end
 	end
@@ -115,11 +135,29 @@ class PageController < ApplicationController
 					else #rate limit var not set, assume it's false
 						can_add = true
 					end
-					if can_add
+					# check if the note is required, and whether it exists
+					if Setting.where(:school => @school, :key => "note-required").exists?
+						setting = Setting.where(:school => @school, :key => "note-required").first.value
+						if setting.downcase == "true" #check if note is set
+							if params['note'].nil? || params['note'] == "undefined" || params['note'] == ""
+								note_required = false # not not filled in correctly
+							else # note is set
+								note_required = true
+								
+							end
+						else # not required, clean it up if it's not set
+							params['note'] = nil if params['note'] == "undefined"
+							note_required = true
+						end
+					else
+						note_required = true
+					end
+					if can_add && note_required
 						p = PointAssignment.new
 						p.staff = current_staff
 						p.activity = @activity
 						p.house = @house
+						p.note = params['note']
 						p.save!
 						# change the points in the house
 						@house.points += @activity.points
@@ -129,7 +167,11 @@ class PageController < ApplicationController
 						@house.save!
 						render json: {success: true}
 					else
-						render json: {error: "You must wait "+check_minutes.to_s+" more minutes before adding more points"}, status: 400
+						if can_add == false
+							render json: {error: "You must wait "+check_minutes.to_s+" more minutes before adding more points"}, status: 400
+						elsif note_required == false
+							render json: {error: "You must fill out the note field"}, status: 400
+						end
 					end
 				end
 			end

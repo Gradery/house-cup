@@ -6,6 +6,7 @@ index do
 	column :staff
 	column :house
 	column :activity
+  column :note if Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").first.value.downcase == "true"
   column :created_at
   actions
 end

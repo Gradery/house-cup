@@ -39,18 +39,21 @@ $(document).ready(function(){
     $("#submit").click(function(){
     	house = $(".active").attr("id");
         activityId = $("#activity").val();
-        console.log(house + " - " + activityId);
+        note = $("#note").val();
+        console.log(house + " - " + activityId + " - " + note);
         if (house === undefined || activityId == "")
             toastr.error("Please Select a House and Activity to Submit Points");
         else
         {
             $.post(window.location.pathname, {
                 house: house,
-                activity: activityId
+                activity: activityId,
+                note: note
             })
             .success(function(data){
                 $(".item img").removeClass("active");
                 $("#activity").val("");
+                $("#note").val("");
                 toastr.success("Points Submitted");
             })
             .error(function(error){
