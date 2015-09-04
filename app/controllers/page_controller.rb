@@ -16,6 +16,7 @@ class PageController < ApplicationController
 		if @school.nil?
 			raise ActionController::RoutingError.new('Not Found')
 		else
+			set_house_term()
 			# get the houses
 			@houses = House.where(:school_id => @school.id).to_a
 			# sort the houses
@@ -89,6 +90,20 @@ class PageController < ApplicationController
 			else
 				@show_note = false
 			end
+
+			# see if we need to show the assign to students section
+			if Setting.where(:school => @school, :key => "track-student-points").exists?
+				temp = Setting.where(:school => @school, :key => "track-student-points").first.value
+				if temp.downcase == "true"
+					@track_student = true
+					# get all the grades a student can be in
+					@grades = Setting.where(:school => @school, :key => "grades").first.value.split(",").delete_if{|a| a == "other"}
+				else
+					@track_student = false
+				end
+			else
+				@track_student = false
+			end
 		end
 	end
 
@@ -153,19 +168,40 @@ class PageController < ApplicationController
 						note_required = true
 					end
 					if can_add && note_required
-						p = PointAssignment.new
-						p.staff = current_staff
-						p.activity = @activity
-						p.house = @house
-						p.note = params['note']
-						p.save!
-						# change the points in the house
-						@house.points += @activity.points
-						if @house.points < 0
-							@house.points = 0
+						# see if we require they have the member_id set
+						if Setting.where(:school => @school, :key => "require-student-points").exists?
+							setting = Setting.where(:school => @school, :key => "require-student-points").first.value
+							if setting.downcase == "true"
+								# check the member id
+								if params['member_id'].nil? || params['member_id'] == "undefined" || params['member_id'] == ""
+									member_id_ok = false
+								else
+									member_id_ok = true
+								end
+							else # doesn't matter
+								member_id_ok = true
+							end
+						else
+							member_id_ok = true
 						end
-						@house.save!
-						render json: {success: true}
+						if member_id_ok
+							p = PointAssignment.new
+							p.staff = current_staff
+							p.activity = @activity
+							p.house = @house
+							p.note = params['note']
+							p.member_id = params['member_id'] if params['member_id'] != "undefined"
+							p.save!
+							# change the points in the house
+							@house.points += @activity.points
+							if @house.points < 0
+								@house.points = 0
+							end
+							@house.save!
+							render json: {success: true}
+						else
+							render json: {error: "You select a student to add points to."}, status: 400
+						end
 					else
 						if can_add == false
 							render json: {error: "You must wait "+check_minutes.to_s+" more minutes before adding more points"}, status: 400
@@ -287,6 +323,14 @@ class PageController < ApplicationController
 	    render :layout => false
 	end
 
+	def students
+		authenticate_staff!
+		@school = School.find(current_staff.school_id.to_i)
+		@house = House.find(params['house'].to_i)
+		students = Member.where(:house => @house, school: @school, grade: params['grade']).all.to_a.sort_by{|a| a[:name]}
+		render json: students
+	end
+
 	def get_school
 		if !params['school'].nil?
 			if School.where(:url => params['school'].downcase).exists?
@@ -294,6 +338,14 @@ class PageController < ApplicationController
 			else
 				return nil
 			end
+		end
+	end
+
+	def set_house_term
+		if Setting.where(:school => @school, key: "house-term").exists?
+			@house_term =  Setting.where(:school => @school, key: "house-term").first.value
+		else
+			@house_term = "House"
 		end
 	end
 end

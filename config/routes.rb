@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'page#index'
 
+  get "/students" => 'page#students'
+
   get ':school' => 'page#show'
   get ':school/stylesheet' => 'page#stylesheet'
   get ':school/about' => 'page#about'

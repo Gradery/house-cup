@@ -18,6 +18,7 @@ class Member < ActiveRecord::Base
 	
 	belongs_to :school
 	belongs_to :house
+	has_many :point_assignments
 
 	validates :badge_id, presence: true
 end

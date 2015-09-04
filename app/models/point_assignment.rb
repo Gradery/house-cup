@@ -19,6 +19,7 @@ class PointAssignment < ActiveRecord::Base
 	belongs_to :staff
 	belongs_to :house
 	belongs_to :activity
+	belongs_to :member
 
 	validates :staff_id, :house_id, :activity_id, presence: true
 end

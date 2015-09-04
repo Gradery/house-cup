@@ -13,6 +13,7 @@
 //= require jquery
 //= require bootstrap
 //= require jquery_ujs
+//= require twitter/typeahead.min
 //= require turbolinks
 //= require Chart
 
@@ -22,6 +23,9 @@ toastr.options = {
   "positionClass": "toast-top-center",
   "timeOut": "2000"
 }
+
+var suggestionData;
+var suggestionDataRaw;
 
 $(document).ready(function(){
     animate($("#score-1"));
@@ -48,12 +52,14 @@ $(document).ready(function(){
             $.post(window.location.pathname, {
                 house: house,
                 activity: activityId,
-                note: note
+                note: note,
+                member_id: $("#member_id").val()
             })
             .success(function(data){
                 $(".item img").removeClass("active");
                 $("#activity").val("");
                 $("#note").val("");
+                $("#grade").val("");
                 toastr.success("Points Submitted");
             })
             .error(function(error){
@@ -64,6 +70,62 @@ $(document).ready(function(){
                     toastr.error("ERROR: Couldn't submit the points. Please try again later.");
             })
         }
+    });
+
+    $("#grade").change(function(e){
+        if ($("#grade").val() !== ""){ //get the students in that and show the student selector
+            $.get("/students?grade="+$("#grade").val()+"&house="+$(".active").attr("id"))
+            .success(function(data){
+                console.log(data);
+
+                suggestionDataRaw = data;
+                suggestionData = [];
+                for(var i = 0; i < data.length; i++)
+                {
+                    suggestionData.push(data[i].name + " (" + data[i].badge_id + ")");
+                }
+                console.log(suggestionData);
+
+                var bh = new Bloodhound({
+                  datumTokenizer: Bloodhound.tokenizers.whitespace,
+                  queryTokenizer: Bloodhound.tokenizers.whitespace,
+                  local: suggestionData
+                });
+                $('#student').typeahead('destroy'); //in case it's already been instantiated
+                $('#student').typeahead({
+                  hint: true,
+                  highlight: true,
+                  minLength: 1
+                },
+                {
+                  name: 'students',
+                  source: bh
+                });
+                $("#studentWrapper").show();
+                $(".twitter-typeahead").css("width", "100%");
+                $(".twitter-typeahead").children().css("width", "100%");
+                $(".tt-menu").css("background-color","white").css("padding","5px").css("border","2px solid black").css("border-radius","5px");
+            })
+            .error(function(data){
+                console.log("error!");
+                console.log(data);
+            })
+        }
+    });
+
+    $('#student').on('typeahead:select', function(ev, suggestion) {
+      console.log('Selection: ' + suggestion);
+      console.log(ev);
+      id = suggestion.replace(")","").split("(")[1];
+      //use the Badge ID to find the actual id and populate the id of the hidden id field
+      for (var i = 0; i < suggestionDataRaw.length; i++)
+      {
+        if (suggestionDataRaw[i].badge_id === id)
+        {
+            $("#member_id").val(suggestionDataRaw[i].id);
+            break;
+        }
+      }
     });
 
     //onboarding functions

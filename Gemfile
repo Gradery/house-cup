@@ -54,6 +54,10 @@ gem 'rqrcode_png'
 gem "awesome_print"
 
 # annotate puts comments on the schema of the models
+gem 'annotate'
+
+# use Twitter Typeahead.JS for the score page
+gem 'twitter-typeahead-rails'
 
 # Use unicorn as the app server
 # gem 'unicorn'
