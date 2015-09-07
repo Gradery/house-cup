@@ -11,6 +11,7 @@
 #  created_at :datetime
 #  updated_at :datetime
 #  deleted_at :datetime
+#  grade      :string(255)
 #
 
 require 'test_helper'

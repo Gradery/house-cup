@@ -104,6 +104,18 @@ class PageController < ApplicationController
 			else
 				@track_student = false
 			end
+
+			#see uf we need to show the options for entering custom points
+			if Setting.where(:school => @school, :key => "custom-points").exists?
+				temp = Setting.where(:school => @school, :key => "custom-points").first.value
+				if temp.downcase == "true"
+					@custom_points = true
+				else
+					@custom_points = false
+				end
+			else
+				@custom_points = false
+			end
 		end
 	end
 
@@ -117,14 +129,11 @@ class PageController < ApplicationController
 			if @house.nil?
 				render json: {error: "House ID is required"}, status: 401
 			else
-				@activity = Activity.find(params['activity'])
-				if @activity.nil?
-					render json: {error: "Activity ID is required"}, status: 401
-				else #we're good to set the points, check if we're rate limiting
+				if params['custom_points'] == "true"
 					can_add = false
 					if Setting.where(:key => "rate-limit", :school => @school).exists? && 
 					   Setting.where(:key => "rate-limit", :school => @school).first.value.downcase == "true"
-						if @activity.points > 0 #positive points
+						if params['amount'].to_i > 0 #positive points
 							check_minutes = Setting.where(:key => "rate-limit-positive-reset-minutes", :school => @school).first.value.to_i
 							check_max_points = Setting.where(:key => "rate-limit-max-positive-points", :school => @school).first.value.to_i
 						else
@@ -136,13 +145,21 @@ class PageController < ApplicationController
 						# go through these and sum up the points in them if they are on the correct side of 0
 						total_points = 0
 						assignments.each do |a|
-							if @activity.points > 0 #positive points only
-								total_points += a.activity.points if a.activity.points > 0
+							if params['amount'].to_i > 0 #positive points only
+								if a.activity.nil? #custom points
+									total_points += a.custom_points_amount if a.custom_points_amount > 0
+								else
+									total_points += a.activity.points if a.activity.points > 0
+								end
 							else #negative points only
-								total_points += a.activity.points if a.activity.points < 0
+								if a.activity.nil?
+									total_points += a.custom_points_amount if a.custom_points_amount < 0
+								else
+									total_points += a.activity.points if a.activity.points < 0
+								end
 							end
 						end
-						if (total_points + @activity.points).abs > check_max_points.abs #can't add
+						if (total_points + params['amount'].to_i).abs > check_max_points.abs #can't add
 							can_add = false
 						else
 							can_add = true
@@ -187,13 +204,16 @@ class PageController < ApplicationController
 						if member_id_ok
 							p = PointAssignment.new
 							p.staff = current_staff
-							p.activity = @activity
+							p.activity = nil
+							p.custom_points = true
+							p.custom_points_title = params['title']
+							p.custom_points_amount = params['amount']
 							p.house = @house
 							p.note = params['note']
 							p.member_id = params['member_id'] if params['member_id'] != "undefined"
 							p.save!
 							# change the points in the house
-							@house.points += @activity.points
+							@house.points += params['amount'].to_i
 							if @house.points < 0
 								@house.points = 0
 							end
@@ -207,6 +227,108 @@ class PageController < ApplicationController
 							render json: {error: "You must wait "+check_minutes.to_s+" more minutes before adding more points"}, status: 400
 						elsif note_required == false
 							render json: {error: "You must fill out the note field"}, status: 400
+						end
+					end
+				else
+					@activity = Activity.find(params['activity'])
+					if @activity.nil?
+						render json: {error: "Activity ID is required"}, status: 401
+					else #we're good to set the points, check if we're rate limiting
+						can_add = false
+						if Setting.where(:key => "rate-limit", :school => @school).exists? && 
+						   Setting.where(:key => "rate-limit", :school => @school).first.value.downcase == "true"
+							if @activity.points > 0 #positive points
+								check_minutes = Setting.where(:key => "rate-limit-positive-reset-minutes", :school => @school).first.value.to_i
+								check_max_points = Setting.where(:key => "rate-limit-max-positive-points", :school => @school).first.value.to_i
+							else
+								check_minutes = Setting.where(:key => "rate-limit-negative-reset-minutes", :school => @school).first.value.to_i
+								check_max_points = Setting.where(:key => "rate-limit-max-negative-points", :school => @school).first.value.to_i
+							end
+							# get all the submissions by this user in the last check_minutes minutes
+							assignments = PointAssignment.where(:staff => current_staff).where("created_at >= ?", DateTime.now - check_minutes.minutes).all
+							# go through these and sum up the points in them if they are on the correct side of 0
+							total_points = 0
+							assignments.each do |a|
+								if @activity.points > 0 #positive points only
+								if a.activity.nil? #custom points
+									total_points += a.custom_points_amount if a.custom_points_amount > 0
+								else
+									total_points += a.activity.points if a.activity.points > 0
+								end
+							else #negative points only
+								if a.activity.nil?
+									total_points += a.custom_points_amount if a.custom_points_amount < 0
+								else
+									total_points += a.activity.points if a.activity.points < 0
+								end
+							end
+							end
+							if (total_points + @activity.points).abs > check_max_points.abs #can't add
+								can_add = false
+							else
+								can_add = true
+							end 
+						else #rate limit var not set, assume it's false
+							can_add = true
+						end
+						# check if the note is required, and whether it exists
+						if Setting.where(:school => @school, :key => "note-required").exists?
+							setting = Setting.where(:school => @school, :key => "note-required").first.value
+							if setting.downcase == "true" #check if note is set
+								if params['note'].nil? || params['note'] == "undefined" || params['note'] == ""
+									note_required = false # not not filled in correctly
+								else # note is set
+									note_required = true
+									
+								end
+							else # not required, clean it up if it's not set
+								params['note'] = nil if params['note'] == "undefined"
+								note_required = true
+							end
+						else
+							note_required = true
+						end
+						if can_add && note_required
+							# see if we require they have the member_id set
+							if Setting.where(:school => @school, :key => "require-student-points").exists?
+								setting = Setting.where(:school => @school, :key => "require-student-points").first.value
+								if setting.downcase == "true"
+									# check the member id
+									if params['member_id'].nil? || params['member_id'] == "undefined" || params['member_id'] == ""
+										member_id_ok = false
+									else
+										member_id_ok = true
+									end
+								else # doesn't matter
+									member_id_ok = true
+								end
+							else
+								member_id_ok = true
+							end
+							if member_id_ok
+								p = PointAssignment.new
+								p.staff = current_staff
+								p.activity = @activity
+								p.house = @house
+								p.note = params['note']
+								p.member_id = params['member_id'] if params['member_id'] != "undefined"
+								p.save!
+								# change the points in the house
+								@house.points += @activity.points
+								if @house.points < 0
+									@house.points = 0
+								end
+								@house.save!
+								render json: {success: true}
+							else
+								render json: {error: "You select a student to add points to."}, status: 400
+							end
+						else
+							if can_add == false
+								render json: {error: "You must wait "+check_minutes.to_s+" more minutes before adding more points"}, status: 400
+							elsif note_required == false
+								render json: {error: "You must fill out the note field"}, status: 400
+							end
 						end
 					end
 				end

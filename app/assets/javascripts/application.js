@@ -36,45 +36,26 @@ $(document).ready(function(){
     animate($("#score-6"));
 
     $(".item").click(function(){
-    	$(".active").removeClass("active");
-    	$(this).find("img").addClass("active");
+    	$(".act").removeClass("act");
+    	$(this).find("img").addClass("act");
     });
 
     $("#submit").click(function(){
-    	house = $(".active").attr("id");
-        activityId = $("#activity").val();
-        note = $("#note").val();
-        console.log(house + " - " + activityId + " - " + note);
-        if (house === undefined || activityId == "")
-            toastr.error("Please Select a House and Activity to Submit Points");
-        else
+        //see if they have custom points turned on
+    	if ($(".active").length > 0)//custom points is on
         {
-            $.post(window.location.pathname, {
-                house: house,
-                activity: activityId,
-                note: note,
-                member_id: $("#member_id").val()
-            })
-            .success(function(data){
-                $(".item img").removeClass("active");
-                $("#activity").val("");
-                $("#note").val("");
-                $("#grade").val("");
-                toastr.success("Points Submitted");
-            })
-            .error(function(error){
-                console.log(error);
-                if (error.status == 400)
-                    toastr.error(error.responseJSON.error);
-                else
-                    toastr.error("ERROR: Couldn't submit the points. Please try again later.");
-            })
+            if ( $(".active")[1].id === "list" )
+                submitSelectedPoints();
+            else
+                submitCustomPoints();
         }
+        else //just subimt normal points
+            submitSelectedPoints();
     });
 
-    $("#grade").change(function(e){
-        if ($("#grade").val() !== ""){ //get the students in that and show the student selector
-            $.get("/students?grade="+$("#grade").val()+"&house="+$(".active").attr("id"))
+    $("#gradeList").change(function(e){
+        if ($("#gradeList").val() !== ""){ //get the students in that and show the student selector
+            $.get("/students?grade="+$("#gradeList").val()+"&house="+$(".act").attr("id"))
             .success(function(data){
                 console.log(data);
 
@@ -91,8 +72,8 @@ $(document).ready(function(){
                   queryTokenizer: Bloodhound.tokenizers.whitespace,
                   local: suggestionData
                 });
-                $('#student').typeahead('destroy'); //in case it's already been instantiated
-                $('#student').typeahead({
+                $('#studentList').typeahead('destroy'); //in case it's already been instantiated
+                $('#studentList').typeahead({
                   hint: true,
                   highlight: true,
                   minLength: 1
@@ -101,7 +82,7 @@ $(document).ready(function(){
                   name: 'students',
                   source: bh
                 });
-                $("#studentWrapper").show();
+                $("#studentWrapperList").show();
                 $(".twitter-typeahead").css("width", "100%");
                 $(".twitter-typeahead").children().css("width", "100%");
                 $(".tt-menu").css("background-color","white").css("padding","5px").css("border","2px solid black").css("border-radius","5px");
@@ -113,7 +94,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#student').on('typeahead:select', function(ev, suggestion) {
+    $('#studentList').on('typeahead:select', function(ev, suggestion) {
       console.log('Selection: ' + suggestion);
       console.log(ev);
       id = suggestion.replace(")","").split("(")[1];
@@ -122,7 +103,63 @@ $(document).ready(function(){
       {
         if (suggestionDataRaw[i].badge_id === id)
         {
-            $("#member_id").val(suggestionDataRaw[i].id);
+            $("#member_id_list").val(suggestionDataRaw[i].id);
+            break;
+        }
+      }
+    });
+
+    $("#gradeCustom").change(function(e){
+        if ($("#gradeCustom").val() !== ""){ //get the students in that and show the student selector
+            $.get("/students?grade="+$("#gradeCustom").val()+"&house="+$(".act").attr("id"))
+            .success(function(data){
+                console.log(data);
+
+                suggestionDataRaw = data;
+                suggestionData = [];
+                for(var i = 0; i < data.length; i++)
+                {
+                    suggestionData.push(data[i].name + " (" + data[i].badge_id + ")");
+                }
+                console.log(suggestionData);
+
+                var bh = new Bloodhound({
+                  datumTokenizer: Bloodhound.tokenizers.whitespace,
+                  queryTokenizer: Bloodhound.tokenizers.whitespace,
+                  local: suggestionData
+                });
+                $('#studentCustom').typeahead('destroy'); //in case it's already been instantiated
+                $('#studentCustom').typeahead({
+                  hint: true,
+                  highlight: true,
+                  minLength: 1
+                },
+                {
+                  name: 'students',
+                  source: bh
+                });
+                $("#studentWrapperCustom").show();
+                $(".twitter-typeahead").css("width", "100%");
+                $(".twitter-typeahead").children().css("width", "100%");
+                $(".tt-menu").css("background-color","white").css("padding","5px").css("border","2px solid black").css("border-radius","5px");
+            })
+            .error(function(data){
+                console.log("error!");
+                console.log(data);
+            })
+        }
+    });
+
+    $('#studentCustom').on('typeahead:select', function(ev, suggestion) {
+      console.log('Selection: ' + suggestion);
+      console.log(ev);
+      id = suggestion.replace(")","").split("(")[1];
+      //use the Badge ID to find the actual id and populate the id of the hidden id field
+      for (var i = 0; i < suggestionDataRaw.length; i++)
+      {
+        if (suggestionDataRaw[i].badge_id === id)
+        {
+            $("#member_id_custom").val(suggestionDataRaw[i].id);
             break;
         }
       }
@@ -150,6 +187,79 @@ $(document).ready(function(){
         }
     });
 });
+function submitCustomPoints(){
+    house = $(".act").attr("id");
+    title = $("#title").val();
+    amount = $("#amount").val();
+    note = $("#note_custom").val();
+    console.log(house + " - " + title + " - " + amount);
+    if (house === undefined || title == "" || amount == "")
+        toastr.error("Please Select a House and fill out the Title and Amount fields to Submit Points");
+    else
+    {
+        $.post(window.location.pathname, {
+            custom_points: true,
+            house: house,
+            title: title,
+            amount: amount,
+            note: note,
+            member_id: $("#member_id_custom").val()
+        })
+        .success(function(data){
+            $(".item img").removeClass("act");
+            $("#activity").val("");
+            $("#note_list").val("");
+            $("#grade").val("");
+            $("#title").val("");
+            $("#note_custom").val("");
+            $("#amount").val("");
+            toastr.success("Points Submitted");
+        })
+        .error(function(error){
+            console.log(error);
+            if (error.status == 400)
+                toastr.error(error.responseJSON.error);
+            else
+                toastr.error("ERROR: Couldn't submit the points. Please try again later.");
+        })
+    }
+}
+
+function submitSelectedPoints(){
+    house = $(".act").attr("id");
+    activityId = $("#activity").val();
+    note = $("#note_list").val();
+    console.log(house + " - " + activityId + " - " + note);
+    if (house === undefined || activityId == "")
+        toastr.error("Please Select a House and Activity to Submit Points");
+    else
+    {
+        $.post(window.location.pathname, {
+            custom_points: false,
+            house: house,
+            activity: activityId,
+            note: note,
+            member_id: $("#member_id_list").val()
+        })
+        .success(function(data){
+            $(".item img").removeClass("act");
+            $("#activity").val("");
+            $("#note_list").val("");
+            $("#grade").val("");
+            $("#title").val("");
+            $("#note_custom").val("");
+            $("#amount").val("");
+            toastr.success("Points Submitted");
+        })
+        .error(function(error){
+            console.log(error);
+            if (error.status == 400)
+                toastr.error(error.responseJSON.error);
+            else
+                toastr.error("ERROR: Couldn't submit the points. Please try again later.");
+        })
+    }
+}
 
 function animate(item){
 	var skillBar = item.children().find('.inner');

@@ -7,6 +7,8 @@ index do
 	column :house
 	column :member if Setting.where(:school_id => current_admin_user.school_id, key: "track-student-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "track-student-points").first.value.downcase == "true"
   column :activity
+  column :custom_points_title if Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").first.value.downcase == "true"
+  column :custom_points_amount if Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").first.value.downcase == "true"
   column :note if Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").first.value.downcase == "true"
   column :created_at
   actions
@@ -24,6 +26,8 @@ form do |f|
       f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
       f.input :member, :collection => Member.where(:school_id => current_admin_user.school_id).all if Setting.where(:school_id => current_admin_user.school_id, key: "track-student-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "track-student-points").first.value.downcase == "true"
       f.input :activity, :collection => Activity.where(:school_id => current_admin_user.school_id).all
+      f.input :custom_points_title if Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").first.value.downcase == "true"
+      f.input :custom_points_amount if Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").first.value.downcase == "true"
       f.input :note if Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").first.value.downcase == "true"
     end
     f.actions
@@ -42,7 +46,11 @@ controller do
   csv do
     column (:staff) {|assignment| assignment.staff.email}
     column (:house) {|assignment| assignment.house.name}
-    column (:activity) {|assignment| assignment.activity.name}
+    column (:member){|assignment|  "N/A" || assignment.member.name if assignment.member_id.nil? } if Setting.where(:school_id => current_admin_user.school_id, key: "track-student-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "track-student-points").first.value.downcase == "true"
+    column (:activity) {|assignment| assignment.activity.name if !assignment.activity.nil?}
+    column (:activity_points){|assignment| assignment.activity.points if !assignment.activity.nil?}
+    column :custom_points_title if Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").first.value.downcase == "true"
+    column :custom_points_amount if Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "custom-points").first.value.downcase == "true"
     column :note if Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "show-note-section").first.value.downcase == "true"
   end
 

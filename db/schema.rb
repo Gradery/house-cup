@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150903215740) do
+ActiveRecord::Schema.define(version: 20150906212747) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -99,6 +99,9 @@ ActiveRecord::Schema.define(version: 20150903215740) do
     t.datetime "deleted_at"
     t.text     "note"
     t.integer  "member_id"
+    t.boolean  "custom_points",        default: false
+    t.text     "custom_points_title"
+    t.integer  "custom_points_amount"
   end
 
   add_index "point_assignments", ["deleted_at"], name: "index_point_assignments_on_deleted_at"
