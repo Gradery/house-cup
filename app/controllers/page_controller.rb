@@ -105,7 +105,7 @@ class PageController < ApplicationController
 				@track_student = false
 			end
 
-			#see uf we need to show the options for entering custom points
+			#see if we need to show the options for entering custom points
 			if Setting.where(:school => @school, :key => "custom-points").exists?
 				temp = Setting.where(:school => @school, :key => "custom-points").first.value
 				if temp.downcase == "true"
@@ -115,6 +115,18 @@ class PageController < ApplicationController
 				end
 			else
 				@custom_points = false
+			end
+
+			#see if we need to show the options for entering the same thing multiple times
+			if Setting.where(:school => @school, :key => "multiple-assignments").exists?
+				temp = Setting.where(:school => @school, :key => "multiple-assignments").first.value
+				if temp.downcase == "true"
+					@can_add_multiple = true
+				else
+					@can_add_multiple = false
+				end
+			else
+				@can_add_multiple = false
 			end
 		end
 	end

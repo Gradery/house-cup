@@ -90,8 +90,16 @@
 			$.plot("#mostpoints",
 				[
 					<% staff.each do |s| 
-						points = PointAssignment.where(:staff_id => s.id).all.map{ |p| p.activity.points}.sum %>
-						{label: "<%= s.email %>", data: <%= points %>},
+						points = PointAssignment.where(:staff_id => s.id).all
+						sum = 0
+						points.each do |p|
+							if p.custom_points_amount.nil?
+								sum = sum + p.activity.points
+							else
+								sum = sum + p.custom_points_amount
+							end
+						end %>
+						{label: "<%= s.email %>", data: <%= sum %>},
 					<% end %>
 				], {
 					series: {

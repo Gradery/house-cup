@@ -53,6 +53,10 @@
                     <label for="note">Note</label>
                     <textarea class="form-control" id="note_list"></textarea>
                 <% end %>
+                <% if @can_add_multiple %>
+                    <label for="times">Add Points This Many Times</label>
+                    <input type="number" class="form-control" id="times_list"/>
+                <% end %>
             </div>
             <div role="tabpanel" class="tab-pane" id="custom">
                 <label for="title">Title</label>
@@ -77,6 +81,10 @@
                     <label for="note">Note</label>
                     <textarea class="form-control" id="note_custom"></textarea>
                 <% end %>
+                <% if @can_add_multiple %>
+            <label for="times">Add Points This Many Times</label>
+            <input type="number" class="form-control" id="times_custom"/>
+        <% end %>
             </div>
           </div>
 
@@ -90,22 +98,26 @@
             <% end %>
         </select>
         <% if @track_student == true %>
-            <label for="grade">Student Grade</label>
-            <select id="grade" class="form-control">
+            <label for="gradeList">Student Grade</label>
+            <select id="gradeList" class="form-control">
             <option value="">- Select One -</option>
             <% @grades.each do |g| %>
                 <option value="<%= g %>"><%= g %></option>
             <% end %>
             </select>
-            <div style="display: none" id="studentWrapper">
+            <div style="display: none" id="studentWrapperList">
                 <label for="student">Student</label>
-                <input type="text" class="form-control typeahead" id="student"/>
+                <input type="text" class="form-control typeahead" id="studentList"/>
                 <input type="hidden" id="member_id_list" />
             </div>
         <% end %>
         <% if @show_note == true %>
             <label for="note">Note</label>
             <textarea class="form-control" id="note_list"></textarea>
+        <% end %>
+        <% if @can_add_multiple %>
+            <label for="times">Add Points This Many Times</label>
+            <input type="number" class="form-control" id="times_list"/>
         <% end %>
     <% end %>
   </div>

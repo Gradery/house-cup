@@ -45,12 +45,45 @@ $(document).ready(function(){
     	if ($(".active").length > 0)//custom points is on
         {
             if ( $(".active")[1].id === "list" )
-                submitSelectedPoints();
+            {
+                count = $("#times_list").val()
+                if (count != "") {
+                    for (var i = 0; i < parseInt(count); i++)
+                    {
+                        submitSelectedPoints();
+                    }
+                }
+                else
+                    submitSelectedPoints();
+            }
             else
-                submitCustomPoints();
+            {
+                count = $("#times_custom").val()
+                if (count != "")
+                {
+                    for (var i = 0; i < parseInt(count); i++)
+                    {
+                        submitCustomPoints();
+                    }
+                }
+                else
+                    submitCustomPoints();
+            }
         }
         else //just subimt normal points
-            submitSelectedPoints();
+        {
+            count = $("#times_list").val()
+            console.log(count);
+            if (count != "")
+            {
+                for (var i = 0; i < parseInt(count); i++)
+                {
+                    submitSelectedPoints();
+                }
+            }
+            else
+                submitSelectedPoints();
+        }
     });
 
     $("#gradeList").change(function(e){
@@ -213,6 +246,11 @@ function submitCustomPoints(){
             $("#title").val("");
             $("#note_custom").val("");
             $("#amount").val("");
+            $("#gradeCustom").val("");
+            $("#member_id_custom").val("");
+            $("#studentWrapperCustom").hide();
+            $('#studentCustom').typeahead('val', "");
+            $('#times_custom').val("");
             toastr.success("Points Submitted");
         })
         .error(function(error){
@@ -249,6 +287,11 @@ function submitSelectedPoints(){
             $("#title").val("");
             $("#note_custom").val("");
             $("#amount").val("");
+            $("#gradeList").val("");
+            $("#member_id_list").val("");
+            $("#studentWrapperList").hide();
+            $('#studentList').typeahead('val', "");
+            $('#times_list').val("");
             toastr.success("Points Submitted");
         })
         .error(function(error){
