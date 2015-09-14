@@ -40,83 +40,85 @@
 <script type="text/javascript" src="/js/flot/jquery.flot.min.js"></script>
 <script type="text/javascript" src="/js/flot/jquery.flot.pie.min.js"></script>
 <script>
+	var houses, activities, staff;
 	$(document).ready(function(){
-		window.onresize = function(event) {
-		<% houses.each do |h| %>
-			$.plot("#housePoints-<%= h.id %>",
-				[
-					<% activities.each do |a| %>
-						{label: "<%= a.name %>", data: <%= PointAssignment.where(:house_id => h.id, :activity_id => a.id).count %>},
-					<% end %>
-				], {
-					series: {
-						pie: {
-							show: true
-						}
-					},
-					legend: {
-						show: true,
-						offet: {
-							left: 0
-						},
-						position: "ne"
-					}
-				}
-			);
-		<% end %>
+		$.get("/api/houses")
+		.success(function(data){
+			houses = data;
+			$.get("/api/staff")
+			.success(function(data){
+				staff = data;
+				$(window).trigger('resize');
+			});
+		});
 
-		<% staff.each do |s| %>
-			$.plot("#staffactivity-<%= s.id %>",
-				[
-					<% activities.each do |a| %>
-						{label: "<%= a.name %>", data: <%= PointAssignment.where( :activity_id => a.id, :staff_id => s.id).count %>},
-					<% end %>
-				], {
-					series: {
-						pie: {
-							show: true
+		window.onresize = function(event) {
+			for (var i = 0; i < houses.length; i++)
+			{
+				$.get("/api/houses/activities?house_id="+houses[i].id)
+				.success(function(data){
+					$.plot("#housePoints-" + data.house, data.data, 
+						{
+							series: {
+								pie: {
+									show: true
+								}
+							},
+							legend: {
+								show: true,
+								offet: {
+									left: 0
+								},
+								position: "ne"
+							}
 						}
-					},
-					legend: {
-						show: true,
-						offet: {
-							left: 0
-						},
-						position: "ne"
-					}
-				}
-			);
-		<% end %>
-			$.plot("#mostpoints",
-				[
-					<% staff.each do |s| 
-						points = PointAssignment.where(:staff_id => s.id).all
-						sum = 0
-						points.each do |p|
-							if p.custom_points_amount.nil?
-								sum = sum + p.activity.points
-							else
-								sum = sum + p.custom_points_amount
-							end
-						end %>
-						{label: "<%= s.email %>", data: <%= sum %>},
-					<% end %>
-				], {
-					series: {
-						pie: {
-							show: true
+					);
+				});
+			}
+
+			for (var i = 0; i < staff.length; i++ )
+			{
+
+				$.get("/api/staff/activities?staff_id="+staff[i].id)
+				.success(function(data){
+					$.plot("#staffactivity-"+data.staff,data.data, 
+						{
+							series: {
+								pie: {
+									show: true
+								}
+							},
+							legend: {
+								show: true,
+								offet: {
+									left: 0
+								},
+								position: "ne"
+							}
 						}
-					},
-					legend: {
-						show: true,
-						offet: {
-							left: 0
+					);
+				});
+			}	
+		
+			$.get("/api/top_points")
+			.success(function(data){
+				$.plot("#mostpoints",data , 
+					{
+						series: {
+							pie: {
+								show: true
+							}
 						},
-						position: "ne"
+						legend: {
+							show: true,
+							offet: {
+								left: 0
+							},
+							position: "ne"
+						}
 					}
-				}
-			);
+				);
+			});
 		};
-	    $(window).trigger('resize');
 	});
 </script>

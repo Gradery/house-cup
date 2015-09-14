@@ -8,6 +8,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'page#index'
 
+  get "/api/houses" => 'api#houses'
+  get "/api/houses/activities" => 'api#house_points_by_activity'
+  get "/api/staff" => 'api#staff'
+  get "/api/staff/activities" => 'api#staff_assignment_by_activity'
+  get "/api/top_points" => 'api#top_points'
+
   get "/students" => 'page#students'
 
   get ':school' => 'page#show'
