@@ -48,12 +48,11 @@ class ApiController < ApplicationController
 		if current_admin_user.nil?
 			render status: 400
 		else
-			staff = Staff.where(:school_id => current_admin_user.school_id.to_s).all 
+			staff = Staff.includes(:point_assignments).where(:school_id => current_admin_user.school_id.to_s).all 
 			text = Array.new
-			staff.each do |s| 
-				points = PointAssignment.where(:staff_id => s.id).all
+			staff.each do |s|
 				sum = 0
-				points.each do |p|
+				s.point_assignments.each do |p|
 					if p.custom_points_amount.nil?
 						sum = sum + p.activity.points
 					else

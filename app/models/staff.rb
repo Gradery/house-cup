@@ -36,6 +36,8 @@ class Staff < ActiveRecord::Base
   belongs_to :school
   belongs_to :house
 
+  has_many :point_assignments
+
   def to_s
   	email
   end
