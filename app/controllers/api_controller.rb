@@ -54,7 +54,7 @@ class ApiController < ApplicationController
 				sum = 0
 				s.point_assignments.each do |p|
 					if !p.custom_points
-						sum = sum + p.activity.points
+						sum = sum + p.activity.points if !p.activity.nil?
 					else
 						sum = sum + p.custom_points_amount
 					end
