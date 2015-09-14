@@ -53,7 +53,7 @@ class ApiController < ApplicationController
 			staff.each do |s|
 				sum = 0
 				s.point_assignments.each do |p|
-					if p.custom_points_amount.nil?
+					if !p.custom_points
 						sum = sum + p.activity.points
 					else
 						sum = sum + p.custom_points_amount
