@@ -47,7 +47,7 @@ $(document).ready(function(){
             if ( $(".active")[1].id === "list" )
             {
                 count = $("#times_list").val()
-                if (count != "") {
+                if (count != "" && count != undefined) {
                     for (var i = 0; i < parseInt(count); i++)
                     {
                         submitSelectedPoints();
@@ -59,7 +59,7 @@ $(document).ready(function(){
             else
             {
                 count = $("#times_custom").val()
-                if (count != "")
+                if (count != "" && count != undefined)
                 {
                     for (var i = 0; i < parseInt(count); i++)
                     {
@@ -73,8 +73,7 @@ $(document).ready(function(){
         else //just subimt normal points
         {
             count = $("#times_list").val()
-            console.log(count);
-            if (count != "")
+            if (count != "" && count != undefined)
             {
                 for (var i = 0; i < parseInt(count); i++)
                 {
