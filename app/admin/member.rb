@@ -24,7 +24,7 @@ form do |f|
     f.inputs "Member" do
       f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
       f.input :name
-      f.input :grade, :collection => Setting.where(:school_id => 1, :key => "grades").first.value.split(",").delete_if{|a| a.downcase == "other"}
+      f.input :grade, :collection => Setting.where(:school_id => current_admin_user.school_id, :key => "grades").first.value.split(",").delete_if{|a| a.downcase == "other"}
       f.input :email
       f.input :badge_id
       f.input :school, :collection => School.all if current_admin_user.school_id.nil?

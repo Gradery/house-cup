@@ -19,6 +19,7 @@
 #  house_id               :integer
 #  grade                  :string(255)
 #  deleted_at             :datetime
+#  name                   :string(255)
 #
 
 class Staff < ActiveRecord::Base

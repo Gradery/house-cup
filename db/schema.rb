@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150906212747) do
+ActiveRecord::Schema.define(version: 20150923212531) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 20150906212747) do
     t.integer  "house_id"
     t.string   "grade"
     t.datetime "deleted_at"
+    t.string   "name"
   end
 
   add_index "staffs", ["deleted_at"], name: "index_staffs_on_deleted_at"
