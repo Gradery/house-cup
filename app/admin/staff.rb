@@ -4,6 +4,7 @@ permit_params :email, :school_id, :house_id, :password, :password_confirmation, 
 
 index do
     selectable_column
+    column :name
     column :email
     column :house
     column :grade
@@ -11,6 +12,7 @@ index do
     actions
   end
 
+  filter :name
   filter :email
   filter :house, :collection => proc { House.where(:school_id => current_admin_user.school_id).all }
   filter :school, :collection => proc { School.all }, if: proc{ current_admin_user.school_id.nil?}
@@ -18,6 +20,7 @@ index do
   
   form do |f|
     f.inputs "Staff Details" do
+      f.input :name
       f.input :email
       f.input :password if !resource.valid?
       f.input :password_confirmation if !resource.valid?
