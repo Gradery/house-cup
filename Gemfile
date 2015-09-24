@@ -59,12 +59,29 @@ gem 'annotate'
 # use Twitter Typeahead.JS for the score page
 gem 'twitter-typeahead-rails'
 
-# Use unicorn as the app server
-# gem 'unicorn'
+group :development do
+	# Guard runs rspec on file changes
+	gem 'guard-rspec', require: false
+	gem 'capistrano', '~> 3.4.0'
+	gem 'capistrano-rvm'
+	gem 'capistrano-bundler', '~> 1.1.2'
+	gem 'capistrano-rails', '~> 1.1'
+	gem 'capistrano-passenger'
+end
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+group :development, :test do
+  	# Mock model data with Factory_Girl
+  	gem 'factory_girl_rails'
+  	# Fuzz and generate random fake data
+  	gem 'faker'
+  	# run tests with RSpec
+  	gem 'rspec-rails', '~> 3.0'
+end
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]
+group :production do
+	# run on Passenger
+	gem 'passenger'
+end
 
+# CodeClimate test reporting
+gem "codeclimate-test-reporter", group: :test, require: nil
