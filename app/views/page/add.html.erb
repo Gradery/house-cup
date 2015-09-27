@@ -36,17 +36,10 @@
                     <% end %>
                 </select>
                 <% if @track_student == true %>
-                    <label for="gradeList">Student Grade</label>
-                    <select id="gradeList" class="form-control">
-                    <option value="">- Select One -</option>
-                    <% @grades.each do |g| %>
-                        <option value="<%= g %>"><%= g %></option>
-                    <% end %>
-                    </select>
-                    <div style="display: none" id="studentWrapperList">
+                    <div id="studentWrapperList">
                         <label for="student">Student</label>
-                        <input type="text" class="form-control typeahead" id="studentList"/>
-                        <input type="hidden" id="member_id_list" />
+                        <input type="text" class="form-control typeahead" id="studentText"/>
+                        <div id="studentListSet"></div>
                     </div>
                 <% end %>
                 <% if @show_note == true %>
@@ -64,17 +57,10 @@
                 <label for="amount">Points</label>
                 <input type="number" class="form-control" id="amount"/>
                 <% if @track_student == true %>
-                    <label for="gradeCustom">Student Grade</label>
-                    <select id="gradeCustom" class="form-control">
-                    <option value="">- Select One -</option>
-                    <% @grades.each do |g| %>
-                        <option value="<%= g %>"><%= g %></option>
-                    <% end %>
-                    </select>
-                    <div style="display: none" id="studentWrapperCustom">
+                    <div id="studentWrapperCustom">
                         <label for="student">Student</label>
-                        <input type="text" class="form-control typeahead" id="studentCustom"/>
-                        <input type="hidden" id="member_id_custom" />
+                        <input type="text" class="form-control typeahead" id="studentTextCustom"/>
+                        <div id="studentListCustom"></div>
                     </div>
                 <% end %>
                 <% if @show_note == true %>
