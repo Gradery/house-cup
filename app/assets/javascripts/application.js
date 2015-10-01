@@ -146,8 +146,14 @@ function submitCustomPoints(){
     amount = $("#amount").val();
     note = $("#note_custom").val();
     console.log(house + " - " + title + " - " + amount);
-    if (house === undefined || title == "" || amount == "")
-        toastr.error("Please Select a House and fill out the Title and Amount fields to Submit Points");
+    var children = $("#studentListCustom").children();
+    var members = [];
+    for (var i = 0; i < children.length; i++)
+    {
+        members.push($(children[i]).attr("id").replace("member_",""));
+    }
+    if (title == "" || amount == "")
+        toastr.error("Please fill out the Title and Amount fields to Submit Points");
     else
     {
         $.post(window.location.pathname, {
@@ -156,7 +162,7 @@ function submitCustomPoints(){
             title: title,
             amount: amount,
             note: note,
-            member_id: $("#member_id_custom").val()
+            member_ids: members
         })
         .success(function(data){
             $(".item img").removeClass("act");
@@ -168,9 +174,10 @@ function submitCustomPoints(){
             $("#amount").val("");
             $("#gradeCustom").val("");
             $("#member_id_custom").val("");
-            $("#studentWrapperCustom").hide();
             $('#studentCustom').typeahead('val', "");
             $('#times_custom').val("");
+            $("#studentListCustom").html("");
+            $("#studentListSet").html("");
             toastr.success("Points Submitted");
         })
         .error(function(error){
@@ -212,9 +219,10 @@ function submitSelectedPoints(){
         $("#amount").val("");
         $("#gradeList").val("");
         $("#member_id_list").val("");
-        $("#studentWrapperList").hide();
         $('#studentList').typeahead('val', "");
         $('#times_list').val("");
+        $("#studentListSet").html("");
+        $("#studentListCustom").html("");
         toastr.success("Points Submitted");
     })
     .error(function(error){

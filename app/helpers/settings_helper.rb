@@ -79,8 +79,8 @@ module SettingsHelper
 			setting = Setting.where(:school => school, :key => "require-student-points").first.value
 			if setting.downcase == "true"
 				# check the member id
-				if params['member_id'].nil? || params['member_id'] == "undefined" || params['member_id'] == ""
-					return "missing member_id"
+				if params['member_ids'].nil? || params['member_ids'] == []
+					return "missing member_ids"
 				else
 					return true
 				end

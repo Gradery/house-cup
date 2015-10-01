@@ -137,30 +137,55 @@ class PageController < ApplicationController
 		if @school.nil?
 			raise ActionController::RoutingError.new('Not Found')
 		else
-			@house = House.find(params['house'])
-			#if @house.nil?
-			#	render json: {error: "House ID is required"}, status: 401
-			#else
 			if params['custom_points'] == "true"
 				can_add = SettingsHelper.can_add(params, @school, current_staff)
-				if can_add
-					p = PointAssignment.new
-					p.staff = current_staff
-					p.activity = nil
-					p.custom_points = true
-					p.custom_points_title = params['title']
-					p.custom_points_amount = params['amount']
-					p.house = @house
-					p.note = params['note']
-					p.member_id = params['member_id'] if params['member_id'] != "undefined"
-					p.save!
-					# change the points in the house
-					@house.points += params['amount'].to_i
-					if @house.points < 0
-						@house.points = 0
+				if can_add == true
+					if params['member_ids'].nil? # add to the house
+						@house = House.find(params['house'])
+						if @house.nil?
+							render json: {error: "House ID is required"}, status: 401
+						else
+							p = PointAssignment.new
+							p.staff = current_staff
+							p.activity = nil
+							p.custom_points = true
+							p.custom_points_title = params['title']
+							p.custom_points_amount = params['amount']
+							p.house = @house
+							p.note = params['note']
+							#p.member_id = params['member_id'] if params['member_id'] != "undefined"
+							p.save!
+							# change the points in the house
+							@house.points += params['amount'].to_i
+							if @house.points < 0
+								@house.points = 0
+							end
+							@house.save!
+							render json: {success: true}
+						end
+					else
+						params['member_ids'].each do |member|
+							ap member
+							m = Member.find(member.to_i)
+							p = PointAssignment.new
+							p.staff = current_staff
+							p.activity = nil
+							p.custom_points = true
+							p.custom_points_title = params['title']
+							p.custom_points_amount = params['amount']
+							p.house = m.house
+							p.note = params['note']
+							p.member_id = member
+							p.save!
+							# change the points in the house
+							m.house.points += params['amount'].to_i
+							if m.house.points < 0
+								m.house.points = 0
+							end
+							m.house.save!
+						end
+						render json: {success: true}
 					end
-					@house.save!
-					render json: {success: true}
 				else
 					handle_adding_error(can_add)
 				end
@@ -171,20 +196,50 @@ class PageController < ApplicationController
 				else #we're good to set the points, check if we're rate limiting
 					can_add = SettingsHelper.can_add(params, @school, current_staff)
 					if can_add == true
-						p = PointAssignment.new
-						p.staff = current_staff
-						p.activity = @activity
-						p.house = @house
-						p.note = params['note']
-						p.member_id = params['member_id'] if params['member_id'] != "undefined"
-						p.save!
-						# change the points in the house
-						@house.points += @activity.points
-						if @house.points < 0
-							@house.points = 0
+						if params['member_ids'].nil? # add to the house
+							@house = House.find(params['house'])
+							if @house.nil?
+								render json: {error: "House ID is required"}, status: 401
+							else
+								p = PointAssignment.new
+								p.staff = current_staff
+								p.activity = @activity
+								p.house = @house
+								p.note = params['note']
+								p.member_id = params['member_id'] if params['member_id'] != "undefined"
+								p.save!
+								# change the points in the house
+								@house.points += @activity.points
+								if @house.points < 0
+									@house.points = 0
+								end
+								@house.save!
+								render json: {success: true}
+							end
+						else
+							params['member_ids'].each do |member|
+								ap member
+								m = Member.find(member.to_i)
+								p = PointAssignment.new
+								p.staff = current_staff
+								p.activity = @activity
+								p.house = m.house
+								p.note = params['note']
+								p.member_id = member
+								p.save!
+								# change the points in the house
+								m.house.points += @activity.points
+								if m.house.points < 0
+									m.house.points = 0
+								end
+								m.house.save!
+								render json: {success: true}
+							end
 						end
-						@house.save!
-						render json: {success: true}
+
+
+
+						
 					else # handle error
 						handle_adding_error(can_add)
 					end
@@ -336,7 +391,7 @@ class PageController < ApplicationController
 	def handle_adding_error(error)
 		if error == "missing required note"
 			render json: {error: "You must fill out the note field"}, status: 400
-		elsif error == "missing member_id"
+		elsif error == "missing member_ids"
 			render json: {error: "You must assign point to at least one student"}, status: 400
 		else # it's the number of minutes they have to wait
 			render json: {error: "You must wait "+error.to_s+" more minutes before adding more points"}, status: 400
