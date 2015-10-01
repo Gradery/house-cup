@@ -38,6 +38,7 @@ $(document).ready(function(){
     $(".item").click(function(){
     	$(".act").removeClass("act");
     	$(this).find("img").addClass("act");
+        getStudents()
     });
 
     $("#submit").click(function(){
@@ -85,113 +86,33 @@ $(document).ready(function(){
         }
     });
 
-    $("#gradeList").change(function(e){
-        if ($("#gradeList").val() !== ""){ //get the students in that and show the student selector
-            $.get("/students?grade="+$("#gradeList").val()+"&house="+$(".act").attr("id"))
-            .success(function(data){
-                console.log(data);
+    getStudents();
 
-                suggestionDataRaw = data;
-                suggestionData = [];
-                for(var i = 0; i < data.length; i++)
-                {
-                    suggestionData.push(data[i].name + " (" + data[i].badge_id + ")");
-                }
-                console.log(suggestionData);
-
-                var bh = new Bloodhound({
-                  datumTokenizer: Bloodhound.tokenizers.whitespace,
-                  queryTokenizer: Bloodhound.tokenizers.whitespace,
-                  local: suggestionData
-                });
-                $('#studentList').typeahead('destroy'); //in case it's already been instantiated
-                $('#studentList').typeahead({
-                  hint: true,
-                  highlight: true,
-                  minLength: 1
-                },
-                {
-                  name: 'students',
-                  source: bh
-                });
-                $("#studentWrapperList").show();
-                $(".twitter-typeahead").css("width", "100%");
-                $(".twitter-typeahead").children().css("width", "100%");
-                $(".tt-menu").css("background-color","white").css("padding","5px").css("border","2px solid black").css("border-radius","5px");
-            })
-            .error(function(data){
-                console.log("error!");
-                console.log(data);
-            })
-        }
-    });
-
-    $('#studentList').on('typeahead:select', function(ev, suggestion) {
+    $('.typeahead').on('typeahead:select', function(ev, suggestion) {
       console.log('Selection: ' + suggestion);
       console.log(ev);
       id = suggestion.replace(")","").split("(")[1];
-      //use the Badge ID to find the actual id and populate the id of the hidden id field
+      //use the Badge ID to find the actual id and put them in the list of users
       for (var i = 0; i < suggestionDataRaw.length; i++)
       {
         if (suggestionDataRaw[i].badge_id === id)
         {
-            $("#member_id_list").val(suggestionDataRaw[i].id);
-            break;
-        }
-      }
-    });
+            //don't add the same student multiple times
+            console.log($("#member_" + suggestionDataRaw[i].id))
+            if ($("#member_" + suggestionDataRaw[i].id).length === 0)
+            {
+                $("#studentListSet").append("<div id='member_"+suggestionDataRaw[i].id+"'><a href='#' class='delete_member'><span class='glyphicon glyphicon-remove'>&nbsp;</span></a>"+suggestion+"</div>");
+                $("#studentListCustom").append("<div id='member_"+suggestionDataRaw[i].id+"'><span class='glyphicon glyphicon-remove'></span>"+suggestion+"</div>");
 
-    $("#gradeCustom").change(function(e){
-        if ($("#gradeCustom").val() !== ""){ //get the students in that and show the student selector
-            $.get("/students?grade="+$("#gradeCustom").val()+"&house="+$(".act").attr("id"))
-            .success(function(data){
-                console.log(data);
-
-                suggestionDataRaw = data;
-                suggestionData = [];
-                for(var i = 0; i < data.length; i++)
-                {
-                    suggestionData.push(data[i].name + " (" + data[i].badge_id + ")");
-                }
-                console.log(suggestionData);
-
-                var bh = new Bloodhound({
-                  datumTokenizer: Bloodhound.tokenizers.whitespace,
-                  queryTokenizer: Bloodhound.tokenizers.whitespace,
-                  local: suggestionData
+                $(".delete_member").click(function(e){
+                    e.preventDefault();
+                    console.log("clicked to delete a member");
+                    console.log($(e.currentTarget).parent().attr("id"));
+                    $(e.currentTarget).parent().remove();
+                    $("#"+$(e.currentTarget).parent().attr("id")).remove();
                 });
-                $('#studentCustom').typeahead('destroy'); //in case it's already been instantiated
-                $('#studentCustom').typeahead({
-                  hint: true,
-                  highlight: true,
-                  minLength: 1
-                },
-                {
-                  name: 'students',
-                  source: bh
-                });
-                $("#studentWrapperCustom").show();
-                $(".twitter-typeahead").css("width", "100%");
-                $(".twitter-typeahead").children().css("width", "100%");
-                $(".tt-menu").css("background-color","white").css("padding","5px").css("border","2px solid black").css("border-radius","5px");
-            })
-            .error(function(data){
-                console.log("error!");
-                console.log(data);
-            })
-        }
-    });
-
-    $('#studentCustom').on('typeahead:select', function(ev, suggestion) {
-      console.log('Selection: ' + suggestion);
-      console.log(ev);
-      id = suggestion.replace(")","").split("(")[1];
-      //use the Badge ID to find the actual id and populate the id of the hidden id field
-      for (var i = 0; i < suggestionDataRaw.length; i++)
-      {
-        if (suggestionDataRaw[i].badge_id === id)
-        {
-            $("#member_id_custom").val(suggestionDataRaw[i].id);
+            }
+            $('.typeahead').typeahead('val', '');
             break;
         }
       }
@@ -225,8 +146,14 @@ function submitCustomPoints(){
     amount = $("#amount").val();
     note = $("#note_custom").val();
     console.log(house + " - " + title + " - " + amount);
-    if (house === undefined || title == "" || amount == "")
-        toastr.error("Please Select a House and fill out the Title and Amount fields to Submit Points");
+    var children = $("#studentListCustom").children();
+    var members = [];
+    for (var i = 0; i < children.length; i++)
+    {
+        members.push($(children[i]).attr("id").replace("member_",""));
+    }
+    if (title == "" || amount == "")
+        toastr.error("Please fill out the Title and Amount fields to Submit Points");
     else
     {
         $.post(window.location.pathname, {
@@ -235,7 +162,7 @@ function submitCustomPoints(){
             title: title,
             amount: amount,
             note: note,
-            member_id: $("#member_id_custom").val()
+            member_ids: members
         })
         .success(function(data){
             $(".item img").removeClass("act");
@@ -247,9 +174,10 @@ function submitCustomPoints(){
             $("#amount").val("");
             $("#gradeCustom").val("");
             $("#member_id_custom").val("");
-            $("#studentWrapperCustom").hide();
             $('#studentCustom').typeahead('val', "");
             $('#times_custom').val("");
+            $("#studentListCustom").html("");
+            $("#studentListSet").html("");
             toastr.success("Points Submitted");
         })
         .error(function(error){
@@ -267,40 +195,83 @@ function submitSelectedPoints(){
     activityId = $("#activity").val();
     note = $("#note_list").val();
     console.log(house + " - " + activityId + " - " + note);
-    if (house === undefined || activityId == "")
-        toastr.error("Please Select a House and Activity to Submit Points");
-    else
+    console.log($("#studentListSet").children());
+    var children = $("#studentListSet").children();
+    var members = [];
+    for (var i = 0; i < children.length; i++)
     {
-        $.post(window.location.pathname, {
-            custom_points: false,
-            house: house,
-            activity: activityId,
-            note: note,
-            member_id: $("#member_id_list").val()
-        })
-        .success(function(data){
-            $(".item img").removeClass("act");
-            $("#activity").val("");
-            $("#note_list").val("");
-            $("#grade").val("");
-            $("#title").val("");
-            $("#note_custom").val("");
-            $("#amount").val("");
-            $("#gradeList").val("");
-            $("#member_id_list").val("");
-            $("#studentWrapperList").hide();
-            $('#studentList').typeahead('val', "");
-            $('#times_list').val("");
-            toastr.success("Points Submitted");
-        })
-        .error(function(error){
-            console.log(error);
-            if (error.status == 400)
-                toastr.error(error.responseJSON.error);
-            else
-                toastr.error("ERROR: Couldn't submit the points. Please try again later.");
-        })
+        members.push($(children[i]).attr("id").replace("member_",""));
     }
+    $.post(window.location.pathname, {
+        custom_points: false,
+        house: house,
+        activity: activityId,
+        note: note,
+        member_ids: members
+    })
+    .success(function(data){
+        $(".item img").removeClass("act");
+        $("#activity").val("");
+        $("#note_list").val("");
+        $("#grade").val("");
+        $("#title").val("");
+        $("#note_custom").val("");
+        $("#amount").val("");
+        $("#gradeList").val("");
+        $("#member_id_list").val("");
+        $('#studentList').typeahead('val', "");
+        $('#times_list').val("");
+        $("#studentListSet").html("");
+        $("#studentListCustom").html("");
+        toastr.success("Points Submitted");
+    })
+    .error(function(error){
+        console.log(error);
+        if (error.status == 400)
+            toastr.error(error.responseJSON.error);
+        else
+            toastr.error("ERROR: Couldn't submit the points. Please try again later.");
+    })
+}
+
+function getStudents()
+{
+    $.get("/students?house="+$(".act").attr("id"))
+    .success(function(data){
+        console.log(data);
+
+        suggestionDataRaw = data;
+        suggestionData = [];
+        for(var i = 0; i < data.length; i++)
+        {
+            suggestionData.push(data[i].name + " (" + data[i].badge_id + ")");
+        }
+        console.log(suggestionData);
+
+        var bh = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.whitespace,
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          local: suggestionData
+        });
+        $('.typeahead').typeahead('destroy'); //in case it's already been instantiated
+        $('.typeahead').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'students',
+          source: bh
+        });
+        $(".typeahead").val("");
+        $(".twitter-typeahead").css("width", "100%");
+        $(".twitter-typeahead").children().css("width", "100%");
+        $(".tt-menu").css("background-color","white").css("padding","5px").css("border","2px solid black").css("border-radius","5px");
+    })
+    .error(function(data){
+        console.log("error!");
+        console.log(data);
+    })
 }
 
 function animate(item){
