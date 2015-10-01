@@ -9,12 +9,9 @@ module SettingsHelper
 		return value
 	end
 
-	private
-
 	def self.check_rate_limit(params, school, staff)
 		if Setting.where(:key => "rate-limit", :school => school).exists? && 
 		   Setting.where(:key => "rate-limit", :school => school).first.value.downcase == "true"
-			puts "checking rate limit"
 			if params['amount'].to_i > 0 #positive points
 				check_minutes = Setting.where(:key => "rate-limit-positive-reset-minutes", :school => school).first.value.to_i
 				check_max_points = Setting.where(:key => "rate-limit-max-positive-points", :school => school).first.value.to_i
@@ -54,7 +51,6 @@ module SettingsHelper
 	def self.check_note_required(params, school)
 		# check if the note is required, and whether it exists
 		if Setting.where(:school => school, :key => "note-required").exists?
-			puts "checking note required"
 			setting = Setting.where(:school => school, :key => "note-required").first.value
 			if setting.downcase == "true" #check if note is set
 				if params['note'].nil? || params['note'] == "undefined" || params['note'] == ""
@@ -63,8 +59,7 @@ module SettingsHelper
 					return true
 					
 				end
-			else # not required, clean it up if it's not set
-				params['note'] = nil if params['note'] == "undefined"
+			else
 				return true
 			end
 		else
