@@ -20,8 +20,3 @@ test:
   <<: *default
   database: db/test.sqlite3
 
-production:
-  <<: *default
-  adapter: postgresql
-  url: postgres://daernucdxmhpzt:eCcfDSzaW_Hk41GjIvuZRvVwB0@ec2-23-21-76-246.compute-1.amazonaws.com:5432/d2lqfplg8v2f44
-
