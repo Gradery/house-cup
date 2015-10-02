@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :staffs
+  devise_for :staffs, controllers: {
+        registrations: 'staff/registrations'
+      }
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # The priority is based upon order of creation: first created -> highest priority.
