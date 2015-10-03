@@ -64,4 +64,13 @@ class ApiController < ApplicationController
 			render json: text
 		end
 	end
+
+	def member_behavior_report
+		if current_staff.nil?
+			render status: 400
+		else
+			BehaviorReportStaff.perform_async(params['members'],current_staff.id)
+			render json: {success: true}
+		end
+	end
 end

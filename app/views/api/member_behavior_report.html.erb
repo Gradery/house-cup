@@ -1,0 +1,66 @@
+<div class="row">
+	<center>
+		<h1>Behavior Report for <%= member.name %> as of <%= Date.today.strftime("%m/%d/%y") %></h1>
+	</center>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<center>
+			<img class="img-responsive" src="<%= points_by_activity_graph_url %>"/>
+		</center>
+	</div>
+	<div class="col-xs-12">
+		<center>
+			<img class="img-responsive" src="<%= best_worst_per_day_of_week_url %>"/>
+		</center>
+	</div>
+	<div class="col-xs-12">
+		<center>
+			<img class="img-responsive" src="<%= points_per_day_url %>"/>
+		</center>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<center>
+			<h2>Raw Data</h2>
+		</center>
+	</div>
+	<div class="col-xs-12">
+		<% current_date = DateTime.new.to_date.to_s
+		first_day = true
+		assignments.each do |a| 
+			if a.created_at.to_date.to_s != current_date
+				if first_day == false %>
+					</tbody>
+				  </table>
+				<% end 
+				first_day = false 
+				current_date = a.created_at.to_date.to_s %>
+				<center><h3><%= a.created_at.strftime("%m/%d/%y") %></h3></center>
+				<table class="table table-stripped">
+					<thead>
+						<th>Time</th>
+						<th>Activity</th>
+						<th>Points</th>
+						<th>Notes</th>
+					</thead>
+					<tbody>
+			<% end %>
+			<tr>
+				<td>
+					<%= a.created_at.strftime("%I:%M %p") %>
+				</td>
+				<td>
+					<%= a.custom_points == true ? a.custom_points_title : a.activity.name %>
+				</td>
+				<td>
+					<%= a.custom_points == true ? a.custom_points_amount : a.activity.points %>
+				</td>
+				<td>
+					<%= a.note %>
+				</td>
+			</tr>
+		<% end %>
+	</div>
+</div>

@@ -3,8 +3,9 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.1'
-# Use postgres as the database for Active Record
+# Use postgres as the database for Active Record (in production)
 gem 'pg'
+# Use Sqlite for development/test
 gem 'sqlite3'
 # Utilize paranoia, which enables soft delets in Active Record
 gem "paranoia", "~> 2.0"
@@ -59,9 +60,27 @@ gem 'annotate'
 # use Twitter Typeahead.JS for the score page
 gem 'twitter-typeahead-rails'
 
+# use PDFKit to make PDFs for student behavior reports
+gem 'pdfkit'
+
+# Gruff makes graph images for student behavior reports
+gem 'gruff'
+
+# Fog gem for file storage
+gem 'fog', '~> 1.34.0'
+gem 'unf'
+
+# Sidekiq for background jobs
+gem 'sidekiq'
+# Sinatra needed for sidekiq web interface
+gem 'sinatra', :require => nil
+# Rubyzip to make zip file of PDFs for report generation
+gem 'rubyzip'
+
 group :development do
 	# Guard runs rspec on file changes
 	gem 'guard-rspec', require: false
+	# Capistano for deployment
 	gem 'capistrano', '~> 3.4.0'
 	gem 'capistrano-rvm'
 	gem 'capistrano-bundler', '~> 1.1.2'
