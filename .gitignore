@@ -33,3 +33,6 @@ bower.json
 # Ignore pow environment settings
 .powenv
 /config/deploy/production.rb
+
+# Ignore fog.rb
+/config/initializers/fog.rb
