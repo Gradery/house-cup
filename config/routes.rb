@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get "/api/staff" => 'api#staff'
   get "/api/staff/activities" => 'api#staff_assignment_by_activity'
   get "/api/top_points" => 'api#top_points'
-  get "/api/behavior_report" => "api#member_behavior_report"
+  post "/api/behavior_report" => "api#member_behavior_report"
 
   get "/students" => 'page#students'
 

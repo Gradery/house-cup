@@ -77,7 +77,7 @@ $(document).ready(function(){
             if ($("#member_" + suggestionDataRaw[i].id).length === 0)
             {
                 $("#studentListSet").append("<div id='member_"+suggestionDataRaw[i].id+"'><a href='#' class='delete_member'><span class='glyphicon glyphicon-remove'>&nbsp;</span></a>"+suggestion+"</div>");
-                $("#studentListCustom").append("<div id='member_"+suggestionDataRaw[i].id+"'><span class='glyphicon glyphicon-remove'></span>"+suggestion+"</div>");
+                $("#studentListCustom").append("<div id='member_"+suggestionDataRaw[i].id+"'><a href='#' class='delete_member'><span class='glyphicon glyphicon-remove'></span></a>"+suggestion+"</div>");
 
                 $(".delete_member").click(function(e){
                     e.preventDefault();

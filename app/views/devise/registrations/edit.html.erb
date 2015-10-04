@@ -47,9 +47,15 @@
   </div>
   <div id="reports" style="display:none">
     <h2>Student Behavior Reports</h2>
+    Select the students below to generate a report for, then click the Generate button. A report will be created for each child. You will receive an email with a link to download the reports.
     <% @students.each do |student| %>
-      <a href="/api/behavior/<%= student.id %>"><%= student.name %> (<%= student.badge_id %>)</a>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="<%= student.id %>"> <%= student.name %> (<%= student.badge_id %>)
+        </label>
+      </div>
     <% end %>
+    <button class="btn btn-primary" id="generate_reports">Generate Reports</button>
   </div>
 </div>
 <%= javascript_include_tag params[:controller] %>

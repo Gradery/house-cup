@@ -69,7 +69,7 @@ class ApiController < ApplicationController
 		if current_staff.nil?
 			render status: 400
 		else
-			BehaviorReportStaff.perform_async(params['members'],current_staff.id)
+			BehaviorReportStaffWorker.perform_async(params['members'],current_staff.id)
 			render json: {success: true}
 		end
 	end

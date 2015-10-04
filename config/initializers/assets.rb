@@ -1,1 +1,1 @@
-Rails.application.config.assets.precompile += %w( staff/registrations.js )
+Rails.application.config.assets.precompile += %w( staff/registrations.js page.js )
