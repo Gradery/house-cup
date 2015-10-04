@@ -52,7 +52,7 @@ class BehaviorReportStaffWorker
   		end
   		# Send to the cloud
   		file = Rails.configuration.s3_bucket.files.create(
-  			:key => "house_cup/development/behavior_reports_#{jid}.zip",
+  			:key => "house_cup/#{Rails.env}/behavior_reports_#{jid}.zip",
   			:body => File.open(zipfile_name),
   			:public => true
   		)
@@ -94,7 +94,7 @@ class BehaviorReportStaffWorker
     g.write("public/" + image_file_name)
     # save file to S3
     file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/development/"+image_file_name,
+		:key => "house_cup/#{Rails.env}/"+image_file_name,
 		:body => File.open("public/" + image_file_name),
 		:public => true
 	)
@@ -149,7 +149,7 @@ class BehaviorReportStaffWorker
     g.write("public/" + image_file_name)
     # save file to S3
     file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/development/"+image_file_name,
+		:key => "house_cup/#{Rails.env}/"+image_file_name,
 		:body => File.open("public/" + image_file_name),
 		:public => true
 	)
@@ -194,7 +194,7 @@ class BehaviorReportStaffWorker
     g.write("public/" + image_file_name)
     # save file to S3
     file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/development/"+image_file_name,
+		:key => "house_cup/#{Rails.env}/"+image_file_name,
 		:body => File.open("public/" + image_file_name),
 		:public => true
 	)

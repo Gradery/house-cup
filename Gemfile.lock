@@ -99,6 +99,9 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-sidekiq (0.5.3)
+      capistrano
+      sidekiq
     celluloid (0.16.0)
       timers (~> 4.0.0)
     chart-js-rails (0.0.9)
@@ -478,6 +481,7 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails (~> 1.1)
   capistrano-rvm
+  capistrano-sidekiq
   chart-js-rails
   codeclimate-test-reporter
   coffee-rails (~> 4.0.0)

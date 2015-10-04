@@ -37,7 +37,7 @@ class BehaviorReportAdminWorker
 
   		# Send to the cloud
   		file = Rails.configuration.s3_bucket.files.create(
-  			:key => "house_cup/development/Full Behavior Report - #{member.name} #{Date.today.strftime('%m-%d-%y')}.pdf",
+  			:key => "house_cup/#{Rails.env}/Full Behavior Report - #{member.name} #{Date.today.strftime('%m-%d-%y')}.pdf",
   			:body => File.open("#{Rails.root}/public/pdfs/#{@jid}/Full Behavior Report - #{member.name} #{Date.today.strftime('%m-%d-%y')}.pdf"),
   			:public => true
   		)
@@ -79,7 +79,7 @@ class BehaviorReportAdminWorker
     g.write("public/" + image_file_name)
     # save file to S3
     file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/development/"+image_file_name,
+		:key => "house_cup/#{Rails.env}/"+image_file_name,
 		:body => File.open("public/" + image_file_name),
 		:public => true
 	)
@@ -134,7 +134,7 @@ class BehaviorReportAdminWorker
     g.write("public/" + image_file_name)
     # save file to S3
     file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/development/"+image_file_name,
+		:key => "house_cup/#{Rails.env}/"+image_file_name,
 		:body => File.open("public/" + image_file_name),
 		:public => true
 	)
@@ -179,7 +179,7 @@ class BehaviorReportAdminWorker
     g.write("public/" + image_file_name)
     # save file to S3
     file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/development/"+image_file_name,
+		:key => "house_cup/#{Rails.env}/"+image_file_name,
 		:body => File.open("public/" + image_file_name),
 		:public => true
 	)
