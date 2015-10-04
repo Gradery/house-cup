@@ -33,12 +33,12 @@ class BehaviorReportAdminWorker
 	    	}
 	    )
   		kit = PDFKit.new(html, page_size: "Letter")
-   		kit.to_file("#{Rails.root}/public/pdfs/#{@jid}/Full Behavior Report - #{member.name} #{Date.today.strftime('%m-%d-%y')}.pdf")
+   		kit.to_file("#{Rails.root}/public/pdfs/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',''').gsub(' ','_')}_#{Date.today.strftime('%m-%d-%y')}.pdf")
 
   		# Send to the cloud
   		file = Rails.configuration.s3_bucket.files.create(
-  			:key => "house_cup/#{Rails.env}/Full Behavior Report - #{member.name} #{Date.today.strftime('%m-%d-%y')}.pdf",
-  			:body => File.open("#{Rails.root}/public/pdfs/#{@jid}/Full Behavior Report - #{member.name} #{Date.today.strftime('%m-%d-%y')}.pdf"),
+  			:key => "house_cup/#{Rails.env}/Full_Behavior_Report_#{member.name.gsub(',''').gsub(' ','_')}_#{Date.today.strftime('%m-%d-%y')}.pdf",
+  			:body => File.open("#{Rails.root}/public/pdfs/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',''').gsub(' ','_')}_#{Date.today.strftime('%m-%d-%y')}.pdf"),
   			:public => true
   		)
   		# remove the folder will all the pdfs in it

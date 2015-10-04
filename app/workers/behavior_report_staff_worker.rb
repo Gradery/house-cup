@@ -35,8 +35,8 @@ class BehaviorReportStaffWorker
 		    	}
 		    )
     		kit = PDFKit.new(html, page_size: "Letter")
-     		kit.to_file("#{Rails.root}/public/pdfs/#{@jid}/Behavior Report - #{member.name} #{Date.today.strftime('%m-%d-%y')}.pdf")
-			  pdfs.push("#{Rails.root}/public/pdfs/#{@jid}/Behavior Report - #{member.name} #{Date.today.strftime('%m-%d-%y')}.pdf")
+     		kit.to_file("#{Rails.root}/public/pdfs/#{@jid}/Behavior_Report_#{member.name.gsub(',''').gsub(' ','_')}_#{Date.today.strftime('%m-%d-%y')}.pdf")
+			  pdfs.push("#{Rails.root}/public/pdfs/#{@jid}/Behavior_Report_#{member.name.gsub(',''').gsub(' ','_')}_#{Date.today.strftime('%m-%d-%y')}.pdf")
     	end
     	# combine all pdfs into a zip file
     	require 'zip'
