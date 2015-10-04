@@ -7,4 +7,12 @@ class ReportMailer < ActionMailer::Base
     mail(:to=>@staff.email,
          :subject=>"House Cup: Your Requested Behavior Reports")
   end
+
+  def email_admin(admin_id, member, file_url)
+  	@admin_user = AdminUser.find(admin_id)
+  	@member = member
+  	@file_url = file_url
+  	mail(:to=>@admin_user.email,
+         :subject=>"House Cup: Admin Behavior Report for "+@member.name)
+  end
 end

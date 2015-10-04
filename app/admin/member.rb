@@ -33,20 +33,9 @@ form do |f|
   end
 
 member_action :behavior_report, method: :get do
-  assignments = PointAssignment.where(:member => resource).all
-  csv_string = CSV.generate do |csv|
-    csv << ["'ID", "Activity", "Points", "Note", "Date / Time"]
-    assignments.each do |a|
-      if a.custom_points
-        csv << [a.id.to_s, a.custom_points_title, a.custom_points_amount.to_s, a.note, a.created_at.strftime("%e/%-m/%y %l:%M %p")]
-      else
-        csv << [a.id.to_s, a.activity.name, a.activity.points.to_s, a.note, a.created_at.strftime("%e/%-m/%y %l:%M %p")]
-      end
-    end
-  end
-  headers['Content-Disposition'] = "attachment; filename=\"Behavior Report "+resource.name+".csv\""
-  headers['Content-Type'] ||= 'text/csv'
-  render text: csv_string
+  BehaviorReportAdminWorker.perform_async(params['id'], current_admin_user.id)
+  flash[:notice] = "Report Requested Successfully"
+  redirect_to request.referrer
 end
 
 controller do
