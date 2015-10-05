@@ -32,7 +32,6 @@ class BehaviorReportAdminWorker
 	    		:assignments => @assignments
 	    	}
 	    )
-      ap html
   		kit = PDFKit.new(html, page_size: "Letter")
       # create the file in advance with a touch
       `touch /tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf`

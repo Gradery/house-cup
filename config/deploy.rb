@@ -41,7 +41,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml', 'config/environments/production.rb', 'config/initializers/fog.rb')
 set :sidekiq_processes, 1
 set :sidekiq_role, [:sidekiq]
-set :sidekiq_options_per_process, ["--queue behavior_report -c 5"]
+set :sidekiq_options_per_process, ["--queue behavior_report -c 1"]
 
 namespace :deploy do
 
