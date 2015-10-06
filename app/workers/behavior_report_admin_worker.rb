@@ -72,11 +72,25 @@ class BehaviorReportAdminWorker
   	end
   	# put this all into an image
   	g = Gruff::Pie.new(2000)
+    g.theme = Gruff::Themes::GREYSCALE
+    g.replace_colors([
+      "#ee4035",
+      "#f37736",
+      "#fdf498",
+      "#7bc043",
+      "#0392cf",
+      "#9400D3",
+      "#4B0082",
+      "#FF0000",
+      "#FF7F00",
+      "#FFFF00",
+      "#00FF00",
+      "#0000FF"
+    ])
     g.title = "Percentage Of Total Points By Activity"
     count.each do |name, c|
       g.data(name, c)
     end
-    g.theme = Gruff::Themes::GREYSCALE
     image_file_name = "1-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
     g.write("/tmp/" + image_file_name)
     # save file to S3
@@ -126,12 +140,26 @@ class BehaviorReportAdminWorker
   	end
   	# turn this into a chart
   	# put this all into an image
-	g = Gruff::Bar.new(2000)
+  	g = Gruff::Bar.new(2000)
+    g.theme = Gruff::Themes::GREYSCALE
+    g.replace_colors([
+      "#ee4035",
+      "#f37736",
+      "#fdf498",
+      "#7bc043",
+      "#0392cf",
+      "#9400D3",
+      "#4B0082",
+      "#FF0000",
+      "#FF7F00",
+      "#FFFF00",
+      "#00FF00",
+      "#0000FF"
+    ])
     g.title = "Best/Worst Days Of The Week"
     days_of_week.each do |name, c|
       g.data(name, c)
     end
-    g.theme = Gruff::Themes::GREYSCALE
     image_file_name = "2-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
     g.write("/tmp/" + image_file_name)
     # save file to S3
@@ -165,7 +193,22 @@ class BehaviorReportAdminWorker
   	end
   	# turn this into a chart
   	# put this all into an image
-	g = Gruff::Area.new(2000)
+	  g = Gruff::Area.new(2000)
+    g.theme = Gruff::Themes::GREYSCALE
+    g.replace_colors([
+      "#ee4035",
+      "#f37736",
+      "#fdf498",
+      "#7bc043",
+      "#0392cf",
+      "#9400D3",
+      "#4B0082",
+      "#FF0000",
+      "#FF7F00",
+      "#FFFF00",
+      "#00FF00",
+      "#0000FF"
+    ])
     g.title = "Points Per Day"
     current_month = 0 # reset this for the next set of tests
     i = 0
@@ -176,7 +219,6 @@ class BehaviorReportAdminWorker
       i += 1
     end
     g.data("points", totals)
-    g.theme = Gruff::Themes::GREYSCALE
     image_file_name = "3-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
     g.write("/tmp/" + image_file_name)
     # save file to S3
