@@ -21,5 +21,6 @@ FactoryGirl.define do
   	name { Faker::Name.name  }
   	points 0
   	color "#000"
+  	school
   end 
 end

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: staffs
+# Table name: admin_users
 #
 #  id                     :integer          not null, primary key
 #  email                  :string(255)      default(""), not null
@@ -15,21 +15,15 @@
 #  last_sign_in_ip        :string(255)
 #  created_at             :datetime
 #  updated_at             :datetime
-#  school_id              :string(255)
-#  house_id               :integer
-#  grade                  :string(255)
+#  school_id              :integer
 #  deleted_at             :datetime
-#  name                   :string(255)
 #
 
 FactoryGirl.define do
-  factory :staff do
+  factory :admin_user do
   	email { Faker::Internet.email }
   	password { Faker::Internet.password }
   	password_confirmation { "#{password}" }
-  	school_id "1"
-  	association :house, factory: :house
-  	grade "6"
-  	name { Faker::Name.name  }
+  	school
   end 
 end

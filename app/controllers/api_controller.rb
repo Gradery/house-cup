@@ -1,16 +1,16 @@
 class ApiController < ApplicationController
 	def houses
 		if current_admin_user.nil?
-			render status: 400
+			render json:{}, status: 400
 		else
 			houses = House.where(:school_id => current_admin_user.school_id).all
-			render json: houses
+			render json: houses 
 		end
 	end
 
 	def house_points_by_activity
 		if current_admin_user.nil?
-			render status: 400
+			render json:{}, status: 400
 		else
 			activities = Activity.where(:school_id => current_admin_user.school_id.to_s).all 
 			text = Array.new
@@ -23,7 +23,7 @@ class ApiController < ApplicationController
 
 	def staff
 		if current_admin_user.nil?
-			render status: 400
+			render json:{}, status: 400
 		else
 			staff = Staff.where(:school_id => current_admin_user.school_id.to_s).all 
 			render json: staff
@@ -32,7 +32,7 @@ class ApiController < ApplicationController
 
 	def staff_assignment_by_activity
 		if current_admin_user.nil?
-			render status: 400
+			render json:{}, status: 400
 		else
 			staff = Staff.where(:school_id => current_admin_user.school_id.to_s).all 
 			activities = Activity.where(:school_id => current_admin_user.school_id.to_s).all 
@@ -46,7 +46,7 @@ class ApiController < ApplicationController
 
 	def top_points
 		if current_admin_user.nil?
-			render status: 400
+			render json:{}, status: 400
 		else
 			staff = Staff.includes(:point_assignments).where(:school_id => current_admin_user.school_id.to_s).all 
 			text = Array.new
@@ -67,7 +67,7 @@ class ApiController < ApplicationController
 
 	def member_behavior_report
 		if current_staff.nil?
-			render status: 400
+			render json:{}, status: 400
 		else
 			BehaviorReportStaffWorker.perform_async(params['members'],current_staff.id)
 			render json: {success: true}
