@@ -278,6 +278,33 @@ RSpec.describe PageController, :type => :controller do
 		end
 	end
 
+	describe "#stylesheet" do
+		it "has correct content type" do
+			get :stylesheet, :school => @school.url
+			expect(response.headers['Content-Type']).to eq "text/css"
+		end
+
+		it "gets all defaults" do
+			get :stylesheet, :school => @school.url
+			expect(response.body).to eq ""
+		end
+
+		it "does not render the default layout" do
+			get :stylesheet, :school => @school.url
+			expect(response).to_not render_template(:layout)
+		end
+
+		it "gets all custom settings" do
+			s = Setting.create(:school => @school, :key => "background-color", :value => "#ffffff")
+			s = Setting.create(:school => @school, :key => "navbar-foreground-color", :value => "#ffffff")
+			s = Setting.create(:school => @school, :key => "button-color", :value => "#ffffff")
+			s = Setting.create(:school => @school, :key => "text-color", :value => "#ffffff")
+
+			get :stylesheet, :school => @school.url
+			expect(response.body).to eq ""
+		end
+	end
+
 	describe "#students" do
 		it "gets all members if no house is present" do
 			sign_in(@staff)

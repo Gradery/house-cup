@@ -9,6 +9,7 @@ RSpec.describe ApiController, :type => :controller do
 
 		it "has HTTP 200 if there is a current_admin_user" do
 			admin_user = FactoryGirl.create(:admin_user)
+			activity = FactoryGirl.create(:activity, :school => admin_user.school)
 			sign_in admin_user
 			get :houses
 			expect(response.status).to eq 200
@@ -23,6 +24,7 @@ RSpec.describe ApiController, :type => :controller do
 
 		it "has HTTP 200 if there is a current_admin_user" do
 			admin_user = FactoryGirl.create(:admin_user)
+			activity = FactoryGirl.create(:activity, :school => admin_user.school)
 			sign_in admin_user
 			get :house_points_by_activity
 			expect(response.status).to eq 200
@@ -37,6 +39,7 @@ RSpec.describe ApiController, :type => :controller do
 
 		it "has HTTP 200 if there is a current_admin_user" do
 			admin_user = FactoryGirl.create(:admin_user)
+			activity = FactoryGirl.create(:activity, :school => admin_user.school)
 			sign_in admin_user
 			get :staff
 			expect(response.status).to eq 200
@@ -51,6 +54,7 @@ RSpec.describe ApiController, :type => :controller do
 
 		it "has HTTP 200 if there is a current_admin_user" do
 			admin_user = FactoryGirl.create(:admin_user)
+			activity = FactoryGirl.create(:activity, :school => admin_user.school)
 			sign_in admin_user
 			get :staff_assignment_by_activity
 			expect(response.status).to eq 200
@@ -65,6 +69,25 @@ RSpec.describe ApiController, :type => :controller do
 
 		it "has HTTP 200 if there is a current_admin_user" do
 			admin_user = FactoryGirl.create(:admin_user)
+			activity = FactoryGirl.create(:activity, :school => admin_user.school)
+			house = FactoryGirl.create(:house, :school => admin_user.school)
+			# set up a custom point point assignment
+			custom = PointAssignment.new
+			custom.custom_points = true
+			custom.custom_points_title = "test"
+			custom.custom_points_amount = 1
+			custom.staff = FactoryGirl.create(:staff, :school_id => admin_user.school.id, :house => house)
+			custom.member = FactoryGirl.create(:member, :school => admin_user.school, :house => custom.staff.house)
+			custom.house = house
+			custom.save!
+			# now set up one assignment set to the activity
+			non_custom = PointAssignment.new
+			non_custom.custom_points = false
+			non_custom.activity = activity
+			non_custom.staff = FactoryGirl.create(:staff, :school_id => admin_user.school.id, :house => house)
+			non_custom.member = FactoryGirl.create(:member, :school => admin_user.school, :house => custom.staff.house)
+			non_custom.house = house
+			non_custom.save!
 			sign_in admin_user
 			get :top_points
 			expect(response.status).to eq 200
