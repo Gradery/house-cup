@@ -1,4 +1,5 @@
 class PageController < ApplicationController
+	before_filter :authenticate_staff!, :only => [:add, :doadd, :students]
 
 	def index
 		@schools = School.all.to_a.sort_by{|h| h[:name]}
@@ -29,7 +30,6 @@ class PageController < ApplicationController
 				end
 			end
 			@max_score += 10
-			puts @max_score
 			# Get the setting to whether to show house names in text or not
 			if Setting.where(:school => @school, :key => "show-house-text-names").exists?
 				temp = Setting.where(:school => @school, :key => "show-house-text-names").first.value
@@ -45,7 +45,6 @@ class PageController < ApplicationController
 	end
 
 	def add
-		authenticate_staff!
 		@school = get_school
 		if @school.nil?
 			raise ActionController::RoutingError.new('Not Found')
@@ -132,7 +131,6 @@ class PageController < ApplicationController
 	end
 
 	def doadd
-		authenticate_staff!
 		@school = get_school
 		if @school.nil?
 			raise ActionController::RoutingError.new('Not Found')
@@ -262,22 +260,18 @@ class PageController < ApplicationController
 			render json: {error: "school not found"}, status: 404
 		else
 			@house = House.find(params['id'])
-			if @house.nil?
-				render json: {error: "house not found"}, status: 404
+			# check house is in school
+			if @house.school_id == @school.id
+				# create member
+				m = Member.new
+				m.school = @school
+				m.house = @house
+				m.badge_id = params['student_id']
+				m.name = params['name']
+				m.save!
+				render json: {success: true}
 			else
-				# check house is in school
-				if @house.school_id = @school.id
-					# create member
-					m = Member.new
-					m.school = @school
-					m.house = @house
-					m.badge_id = params['student_id']
-					m.name = params['name']
-					m.save!
-					render json: {success: true}
-				else
-					render json: {error: "house is not in listed school"}, status: 401
-				end
+				render json: {error: "house is not in listed school"}, status: 401
 			end
 		end
 	end
@@ -358,7 +352,6 @@ class PageController < ApplicationController
 	end
 
 	def students
-		authenticate_staff!
 		@school = School.find(current_staff.school_id.to_i)
 		@house = House.where(:id => params['house'].to_i).first
 		ap @house
