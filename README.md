@@ -25,9 +25,5 @@ Documentation and Tutorial Videos
 
 Automated Tests
 
-Coming in Version 2.0:
-* Option to add points to a specific student
-* Export reports on student behavior
-* Ability to add custom points
-* Add optional notes section to explain details of what happened.
-* Option to enter custom point values
+Coming in Version 2.5:
+* Create a classroom-specific version to only track points in your classroom(s)
