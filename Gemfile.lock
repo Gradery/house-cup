@@ -294,6 +294,10 @@ GEM
     listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    lograge (0.3.4)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     lumberjack (1.0.9)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -371,6 +375,7 @@ GEM
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
     rmagick (2.15.4)
+    rollbar (2.2.1)
     rqrcode (0.4.2)
     rqrcode_png (0.1.5)
       chunky_png
@@ -438,6 +443,7 @@ GEM
       colorize (>= 0.7.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    syslogger (1.6.4)
     therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
       ref
@@ -493,12 +499,14 @@ DEPENDENCIES
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
+  lograge (~> 0.3.1)
   paperclip
   paranoia (~> 2.0)
   passenger
   pdfkit
   pg
   rails (= 4.1.1)
+  rollbar (~> 2.2.1)
   rqrcode
   rqrcode_png
   rspec-rails (~> 3.0)
@@ -509,6 +517,7 @@ DEPENDENCIES
   sinatra
   spring
   sqlite3
+  syslogger (~> 1.6.0)
   therubyracer
   turbolinks
   twitter-typeahead-rails

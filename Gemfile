@@ -77,6 +77,13 @@ gem 'sinatra', :require => nil
 # Rubyzip to make zip file of PDFs for report generation
 gem 'rubyzip'
 
+# Rollbar for exception monitoring for JS and Ruby
+gem 'rollbar', '~> 2.2.1'
+
+# Gems for Loggly
+gem 'syslogger', '~> 1.6.0'
+gem 'lograge', '~> 0.3.1'
+
 group :development do
 	# Guard runs rspec on file changes
 	gem 'guard-rspec', require: false
