@@ -61,6 +61,28 @@ feature 'Index page without ' do
 			expect(page).to have_content "Log in"
 		end
 
+		scenario "has sign up link" do
+			visit "/staffs/sign_in"
+			expect(page).to have_link "Sign up"
+		end
+
+		scenario "sign up link goes to right place" do
+			visit "/staffs/sign_in"
+			click_link "Sign up"
+			expect(page).to have_content "Password confirmation"
+		end
+
+		scenario "has forgot password link" do
+			visit "/staffs/sign_in"
+			expect(page).to have_link "Forgot your password?"
+		end
+
+		scenario "forgot password link goes to right place" do
+			visit "/staffs/sign_in"
+			click_link "Forgot your password?"
+			expect(page).to have_button "Send me reset password instructions"
+		end
+
 		scenario "user signs in" do
 			u = FactoryGirl.build(:staff, :school_id => @s.id)
 			u.password = "password"
@@ -73,6 +95,18 @@ feature 'Index page without ' do
 		    end
 		    click_button 'Log in'
     		expect(page).to have_content 'My Profile'
+		end
+	end
+
+	describe "forgot password page", :type => :feature do
+		scenario "user enters email" do
+			u = FactoryGirl.create(:staff)
+			visit "/staffs/password/new"
+			within("#new_staff") do
+		      fill_in 'Email', :with => u.email
+		    end
+		    click_button 'Send me reset password instructions'
+		    expect(page).to have_content "You will receive an email with instructions on how to reset your password in a few minutes."
 		end
 	end
 end
