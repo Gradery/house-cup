@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.1'
+gem 'rails', '4.2.4'
 # Use postgres as the database for Active Record (in production)
 gem 'pg'
 # Use Sqlite for development/test
@@ -103,6 +103,8 @@ group :development, :test do
   	gem 'faker'
   	# run tests with RSpec
   	gem 'rspec-rails', '~> 3.0'
+  	# run test with Capybara
+  	gem 'capybara'
 end
 
 group :production do

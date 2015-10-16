@@ -13,7 +13,7 @@ $(document).ready(function(){
     $(".item").click(function(){
     	$(".act").removeClass("act");
     	$(this).find("img").addClass("act");
-        getStudents()
+        getStudents();
     });
 
     $("#submit").click(function(){
