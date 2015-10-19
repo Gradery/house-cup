@@ -1,11 +1,12 @@
 //= require jquery
 //= require bootstrap
 //= require jquery_ujs
-
+var table;
 $(document).ready(function(){
 	$("#profileBtn").click(function(){
 		$("#profile").show();
 		$("#reports").hide();
+		$("#roster").hide();
 		$("li.active").removeClass("active");
 		$(this).parent().addClass("active");
 	});
@@ -13,8 +14,20 @@ $(document).ready(function(){
 	$("#reportsBtn").click(function(){
 		$("#profile").hide();
 		$("#reports").show();
+		$("#roster").hide();
 		$("li.active").removeClass("active");
 		$(this).parent().addClass("active");
+	});
+	$("#rosterBtn").click(function(){
+		$("#profile").hide();
+		$("#reports").hide();
+		$("#roster").show();
+		$("li.active").removeClass("active");
+		$(this).parent().addClass("active");
+		if ( $.fn.dataTable.isDataTable( '.datatable' ) ) {
+			table.destroy();
+		}
+		table = $('.datatable').DataTable({});
 	});
 
 	$("#generate_reports").click(function(){

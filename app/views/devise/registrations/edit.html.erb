@@ -2,6 +2,8 @@
   <ul class="nav nav-pills nav-stacked">
     <li role="presentation" class="active"><a href="#" id="profileBtn">Profile</a></li>
     <li role="presentation"><a href="#" id="reportsBtn">Reports</a></li>
+    <li role="presentation"><a href="#" id="rosterBtn">Roster</a></li>
+    <li role="presentation"><%= link_to('Logout', destroy_staff_session_path) %></li>
   </ul>
 </div>
 <div class="col-xs-10">
@@ -40,8 +42,6 @@
         <%= f.submit "Update", :class => "btn btn-primary form-control" %>
       </div>
     <% end %>
-
-    <%= link_to "Back", :back %>
       </div>
     </div>
   </div>
@@ -56,6 +56,27 @@
       </div>
     <% end %>
     <button class="btn btn-primary" id="generate_reports">Generate Reports</button>
+  </div>
+  <div id="roster" style="display:none">
+    <h2>Student Roster</h2>
+    <table class="table table-stripped datatable">
+      <thead>
+        <th>Name</th>
+        <th>House</th>
+        <th>Grade</th>
+        <th>Badge ID</th>
+      </thead>
+      <tbody>
+        <% @members.each do |m| %>
+          <tr>
+            <td><%= m.name %></td>
+            <td><%= m.house.name %></td>
+            <td><%= m.grade %></td>
+            <td><%= m.badge_id %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>
 <%= javascript_include_tag params[:controller] %>

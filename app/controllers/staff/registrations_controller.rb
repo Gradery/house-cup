@@ -15,7 +15,9 @@ class Staff::RegistrationsController < Devise::RegistrationsController
   # GET /resource/edit
   def edit
     # get list of students this staff has assigned points to
+    @school = School.where(:id => current_staff.school_id).first
     @students = PointAssignment.where(:staff => current_staff).all.map{|a| a.member}.uniq.delete_if{|a| a.nil?}.sort_by{|a| a.name }
+    @members = Member.where(:school_id => current_staff.school_id).all.sort_by{|m| m.name.downcase }
     super
   end
 
