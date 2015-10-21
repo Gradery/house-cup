@@ -137,6 +137,7 @@ GEM
     coffee-script-source (1.9.1.1)
     colorize (0.7.7)
     connection_pool (2.2.0)
+    database_cleaner (1.5.1)
     devise (3.5.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -519,6 +520,7 @@ DEPENDENCIES
   chart-js-rails
   codeclimate-test-reporter
   coffee-rails (~> 4.0.0)
+  database_cleaner
   devise
   factory_girl_rails
   faker

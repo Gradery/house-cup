@@ -15,5 +15,6 @@ FactoryGirl.define do
   factory :activity do
   	name { Faker::Name.name  }
   	points 1
+  	school
   end 
 end

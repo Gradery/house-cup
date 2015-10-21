@@ -12,5 +12,8 @@
 #
 FactoryGirl.define do
   factory :setting do
+  	key { Faker::Lorem.word }
+  	value { Faker::Lorem.word }
+  	school
   end 
 end

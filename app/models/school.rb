@@ -19,4 +19,5 @@ class School < ActiveRecord::Base
 	has_many :members
 
 	validates :name, :url, presence: true
+	validates :url, :uniqueness => true
 end

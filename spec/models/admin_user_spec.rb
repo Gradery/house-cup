@@ -19,11 +19,21 @@
 #  deleted_at             :datetime
 #
 
-class AdminUser < ActiveRecord::Base
-  acts_as_paranoid
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, 
-         :recoverable, :rememberable, :trackable, :validatable
-  belongs_to :school
+require "rails_helper"
+
+RSpec.describe AdminUser, :type => :model do
+	before(:all) do
+		@school = FactoryGirl.create(:school)
+	end
+
+	it "creates a user without a school" do
+		a = FactoryGirl.build(:admin_user)
+		a.school = nil
+		expect(a.valid?).to eq true
+	end
+
+	it "creates a user with a school" do
+		a = FactoryGirl.build(:admin_user)
+		expect(a.valid?).to eq true
+	end
 end

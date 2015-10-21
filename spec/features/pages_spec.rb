@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature 'Index page without ' do
-	before :all do
+	before :each do
 		@s = FactoryGirl.create(:school)
 	end
 

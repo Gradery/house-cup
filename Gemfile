@@ -105,6 +105,8 @@ group :development, :test do
   	gem 'rspec-rails', '~> 3.0'
   	# run test with Capybara
   	gem 'capybara'
+  	# use database_cleaner to reset the database often
+  	gem 'database_cleaner'
 end
 
 group :production do
