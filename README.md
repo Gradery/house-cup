@@ -1,4 +1,6 @@
 # House Cup
+
+[![Join the chat at https://gitter.im/Gradery/house-cup](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Gradery/house-cup?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [ ![Codeship Status for Gradery/house-cup](https://codeship.com/projects/ac696160-b557-0132-ad65-7279f6055769/status?branch=master)](https://codeship.com/projects/70737) [![Test Coverage](https://codeclimate.com/github/Gradery/house-cup/badges/coverage.svg)](https://codeclimate.com/github/Gradery/house-cup/coverage)
 
 House Cup allows schools to create Hogwarts-esque houses, and give/take away points.
