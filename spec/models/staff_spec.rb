@@ -44,4 +44,9 @@ RSpec.describe Staff, :type => :model do
 		expect(a.valid?).to eq false
 		expect(a.errors.messages.to_json).to eq "{\"school_id\":[\"can't be blank\"]}"
 	end
+
+	it "returns the email when to_s is called" do
+		a = FactoryGirl.create(:staff)
+		expect(a.to_s).to eq a.email
+	end
 end

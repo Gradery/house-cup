@@ -8,14 +8,14 @@ class PageController < ApplicationController
 	def about
 		@school = get_school
 		if @school.nil?
-			raise ActionController::RoutingError.new('Not Found')
+			render status: 404
 		end
 	end
 
 	def show
 		@school = get_school
 		if @school.nil?
-			raise ActionController::RoutingError.new('Not Found')
+			render status: 404
 		else
 			set_house_term()
 			# get the houses
@@ -47,11 +47,11 @@ class PageController < ApplicationController
 	def add
 		@school = get_school
 		if @school.nil?
-			raise ActionController::RoutingError.new('Not Found')
+			render status: 404
 		else
 			# make sure school matches the staff
 			if current_staff.school_id.to_i != @school.id
-				raise ActionController::RoutingError.new('Not Authorized')
+				render status: 401
 			else
 				@houses = House.where(:school_id => @school.id).to_a
 				@activities = Activity.where(:school_id => @school.id).to_a
@@ -133,13 +133,13 @@ class PageController < ApplicationController
 	def doadd
 		@school = get_school
 		if @school.nil?
-			raise ActionController::RoutingError.new('Not Found')
+			render html: "",status: 404
 		else
 			if params['custom_points'] == "true"
 				can_add = SettingsHelper.can_add(params, @school, current_staff)
 				if can_add == true
 					if params['member_ids'].nil? # add to the house
-						@house = House.find(params['house'])
+						@house = House.where(:id => params['house']).first
 						if @house.nil?
 							render json: {error: "House ID is required"}, status: 401
 						else
@@ -188,7 +188,7 @@ class PageController < ApplicationController
 					handle_adding_error(can_add)
 				end
 			else
-				@activity = Activity.find(params['activity'])
+				@activity = Activity.where(id: params['activity']).first
 				if @activity.nil?
 					render json: {error: "Activity ID is required"}, status: 401
 				else #we're good to set the points, check if we're rate limiting

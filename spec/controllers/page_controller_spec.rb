@@ -44,6 +44,11 @@ RSpec.describe PageController, :type => :controller do
 			get :about, :school => @school.url
 			expect(response).to render_template(:about)
 		end
+
+		it "has HTTP status 404 if school is not found" do
+			get :about, :school => "something_new"
+			expect(response.status).to eq 404
+		end
 	end
 
 	describe "#show" do
@@ -80,6 +85,11 @@ RSpec.describe PageController, :type => :controller do
 			s = Setting.create(:school => @school, :key => "show-house-text-names", :value => "true")
 			get :show, :school => @school.url
 			expect(assigns(:showHouseTextNames)).to eq true
+		end
+
+		it "has HTTP status 404 if school is not found" do
+			get :show, :school => "something_new"
+			expect(response.status).to eq 404
 		end
 	end
 
@@ -202,6 +212,19 @@ RSpec.describe PageController, :type => :controller do
 			get :add, :school => @school.url
 			expect(assigns(:can_add_multiple)).to eq true
 		end
+
+		it "has HTTP status 404 if school is not found" do
+			sign_in(@staff)
+			get :add, :school => "something_new"
+			expect(response.status).to eq 404
+		end
+
+		it "has HTTP status 401 if school is not the staff's school" do
+			school = FactoryGirl.create(:school)
+			sign_in(@staff)
+			get :add, :school => school.url
+			expect(response.status).to eq 401
+		end
 	end
 
 	describe "#doadd" do
@@ -231,6 +254,38 @@ RSpec.describe PageController, :type => :controller do
 			count = PointAssignment.count
 			post :doadd, :custom_points => "false", :activity => @activity.id, :note => "abc", :member_ids => [@member.id], :school => @school.url
 			expect(PointAssignment.count).to eq (count+1)
+		end
+
+		it "has HTTP status 404 if school is not found" do
+			sign_in(@staff)
+			post :doadd, :school => "something_new"
+			expect(response.status).to eq 404
+		end
+
+		it "has HTTP status 401 if not member_ids and no house_id and custom points is true" do
+			sign_in(@staff)
+			post :doadd, :school => @school.url, :custom_points => "true"
+			expect(response.status).to eq 401
+		end
+
+		it "has HTTP status 401 if not member_ids and no house_id and custom points is false" do
+			sign_in(@staff)
+			post :doadd, :school => @school.url, :custom_points => "false"
+			expect(response.status).to eq 401
+		end
+
+		it "custom points does not let house points go below 0 when assigned to a house" do
+			sign_in(@staff)
+			post :doadd, :custom_points => "true", :title => "title", :amount => "-1000000", :note => "abc", :house => @house.id, :school => @school.url
+			expect(response.status).to eq 200
+			expect(House.find(@house.id).points).to eq 0
+		end
+
+		it "custom points does not let house points go below 0 when assigned to a member" do
+			sign_in(@staff)
+			post :doadd, :custom_points => "true", :title => "title", :amount => "-1000000", :note => "abc", :member_ids => [@member.id], :school => @school.url
+			expect(response.status).to eq 200
+			expect(House.find(@house.id).points).to eq 0
 		end
 	end
 
