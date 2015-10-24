@@ -9,7 +9,7 @@ The objective of the project is to give administrators and teachers a new tool t
 
 The house system encourages students to use peer pressure to help motivate their peers to be better students and school citizens in order to earn more points.
 
-For administrators, we plan to put in analytics to allow them to see what teachers are rewarding students for, what are the most common activities, etc.
+For administrators, we hqve analytics to allow them to see what teachers are rewarding students for, what are the most common activities, etc.
 
 While currently in heavy development, The Gradery will be offering a hosted solution to House Cup for schools and districts that do not want to host it.
 
@@ -22,8 +22,6 @@ Main House Cup Landing/Marketing page
 Auto account creation / payment processing integration
 
 Documentation and Tutorial Videos
-
-Automated Tests
 
 Coming in Version 2.5:
 * Create a classroom-specific version to only track points in your classroom(s)
