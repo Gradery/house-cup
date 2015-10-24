@@ -38,15 +38,17 @@ class BehaviorReportAdminWorker
    		kit.to_file("/tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf")
 
   		# Send to the cloud
-  		file = Rails.configuration.s3_bucket.files.create(
-  			:key => "house_cup/#{Rails.env}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf",
-  			:body => File.open("/tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf"),
-  			:public => true
-  		)
-  		# remove the folder will all the pdfs in it
-  		`rm -R /tmp/#{@jid}`
-  		# send an email to the user with the download link
-  		ReportMailer.email_admin(admin_id, member, file.public_url).deliver!
+  		if !Rails.env.test?
+        file = Rails.configuration.s3_bucket.files.create(
+    			:key => "house_cup/#{Rails.env}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf",
+    			:body => File.open("/tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf"),
+    			:public => true
+    		)
+    		# remove the folder will all the pdfs in it
+    		`rm -R /tmp/#{@jid}`
+    		# send an email to the user with the download link
+    		ReportMailer.email_admin(admin_id, member, file.public_url).deliver!
+      end
     end # else finish the job, it's not valid
   end
 
@@ -94,14 +96,18 @@ class BehaviorReportAdminWorker
     image_file_name = "1-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
     g.write("/tmp/" + image_file_name)
     # save file to S3
-    file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/#{Rails.env}/"+image_file_name,
-		:body => File.open("/tmp/" + image_file_name),
-		:public => true
-	)
-	# delete the temp file
-	File.delete("/tmp/" + image_file_name)
-	return file.public_url
+    if !Rails.env.test?
+      file = Rails.configuration.s3_bucket.files.create(
+    		:key => "house_cup/#{Rails.env}/"+image_file_name,
+    		:body => File.open("/tmp/" + image_file_name),
+    		:public => true
+    	)
+      # delete the temp file
+      File.delete("/tmp/" + image_file_name)
+      return file.public_url
+    else
+      return "http://placehold.it/350x150"
+    end
   end
 
   def best_worst_per_day_of_week(admin_id, member_id, assignments)
@@ -163,14 +169,18 @@ class BehaviorReportAdminWorker
     image_file_name = "2-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
     g.write("/tmp/" + image_file_name)
     # save file to S3
-    file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/#{Rails.env}/"+image_file_name,
-		:body => File.open("/tmp/" + image_file_name),
-		:public => true
-	)
-	# delete the temp file
-	File.delete("/tmp/" + image_file_name)
-	return file.public_url
+    if !Rails.env.test?
+      file = Rails.configuration.s3_bucket.files.create(
+    		:key => "house_cup/#{Rails.env}/"+image_file_name,
+    		:body => File.open("/tmp/" + image_file_name),
+    		:public => true
+    	)
+    	# delete the temp file
+    	File.delete("/tmp/" + image_file_name)
+    	return file.public_url
+    else
+      return "http://placehold.it/350x150"
+    end
   end
 
   def points_per_day(admin_id, member_id, assignments)
@@ -222,13 +232,17 @@ class BehaviorReportAdminWorker
     image_file_name = "3-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
     g.write("/tmp/" + image_file_name)
     # save file to S3
-    file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/#{Rails.env}/"+image_file_name,
-		:body => File.open("/tmp/" + image_file_name),
-		:public => true
-	)
-	# delete the temp file
-	File.delete("/tmp/" + image_file_name)
-	return file.public_url
+    if !Rails.env.test?
+      file = Rails.configuration.s3_bucket.files.create(
+    		:key => "house_cup/#{Rails.env}/"+image_file_name,
+    		:body => File.open("/tmp/" + image_file_name),
+    		:public => true
+    	)
+    	# delete the temp file
+    	File.delete("/tmp/" + image_file_name)
+    	return file.public_url
+    else
+      return "http://placehold.it/350x150"
+    end
   end
 end
