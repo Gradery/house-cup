@@ -12,7 +12,7 @@ class BehaviorReportStaffWorker
 			 # get PointAssignments
 			 @assignments = PointAssignment.where(:staff => current_staff, :member_id => member_id).order("created_at ASC").all
 			 points_by_activity_graph_url = generate_points_by_activity(staff_id, member_id, @assignments)
-    		best_worst_per_day_of_week_url = best_worst_per_day_of_week(staff_id, member_id, @assignments)
+    	 best_worst_per_day_of_week_url = best_worst_per_day_of_week(staff_id, member_id, @assignments)
     		points_per_day_url = points_per_day(staff_id, member_id, @assignments)
     		# render the HTML a string, dump that into a PDF
     		#require Rails.root.to_s+"/apps/controllers/background_view_controller"
@@ -118,15 +118,15 @@ class BehaviorReportStaffWorker
   end
 
   def best_worst_per_day_of_week(staff_id, member_id, assignments)
-	days_of_week = {
-		"Monday" => 0,
-		"Tuesday" => 0,
-		"Wednesday" => 0,
-		"Thursday" => 0,
-		"Friday" => 0,
-		"Saturday" => 0,
-		"Sunday" => 0
-	}
+  	days_of_week = {
+  		"Monday" => 0,
+  		"Tuesday" => 0,
+  		"Wednesday" => 0,
+  		"Thursday" => 0,
+  		"Friday" => 0,
+  		"Saturday" => 0,
+  		"Sunday" => 0
+  	}
   	assignments.each do |a|
   		# get day of the week
   		dow = a.created_at.to_datetime.cwday
@@ -145,15 +145,15 @@ class BehaviorReportStaffWorker
   		elsif dow == 7
   			day = "Sunday"
   		end
-  		if a.custom_points == true # custom assignment
-			days_of_week[day] += a.custom_points_amount
-		else # pre-set activity
-			days_of_week[day] += a.activity.points
-		end
-  	end
+    	if a.custom_points == true # custom assignment
+  			days_of_week[day] += a.custom_points_amount
+  		else # pre-set activity
+  			days_of_week[day] += a.activity.points
+  		end
+    end
   	# turn this into a chart
   	# put this all into an image
-	  g = Gruff::Bar.new(2000)
+    g = Gruff::Bar.new(2000)
     g.theme = Gruff::Themes::GREYSCALE
     g.replace_colors([
       "#ee4035",
@@ -177,13 +177,13 @@ class BehaviorReportStaffWorker
     g.write("/tmp/" + image_file_name)
     # save file to S3
     file = Rails.configuration.s3_bucket.files.create(
-		:key => "house_cup/#{Rails.env}/"+image_file_name,
-		:body => File.open("/tmp/" + image_file_name),
-		:public => true
-	)
-	# delete the temp file
-	File.delete("public/" + image_file_name)
-	return file.public_url
+  		:key => "house_cup/#{Rails.env}/"+image_file_name,
+  		:body => File.open("/tmp/" + image_file_name),
+  		:public => true
+  	)
+  	# delete the temp file
+    File.delete("/tmp/" + image_file_name)
+  	return file.public_url
   end
 
   def points_per_day(staff_id, member_id, assignments)

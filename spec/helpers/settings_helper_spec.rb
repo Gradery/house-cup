@@ -44,7 +44,7 @@ RSpec.describe SettingsHelper, :type => :helper do
 
   	it "return the minutes if rate limit postive points has been met" do
   		params = {
-  			"amount" => 5,
+  			"amount" => 4,
 
   		}
   		FactoryGirl.create(:setting, :key => "rate-limit", :value => "true", :school => @school)
@@ -52,6 +52,11 @@ RSpec.describe SettingsHelper, :type => :helper do
   		FactoryGirl.create(:setting, :key => "rate-limit-positive-reset-minutes", :value => "5", :school => @school)
   		
   		val = SettingsHelper.check_rate_limit(params, @school, @staff)
+      params = {
+        "amount" => 5,
+
+      }
+      val = SettingsHelper.check_rate_limit(params, @school, @staff)
   		expect(val).to eq 5
   	end
 
@@ -70,14 +75,19 @@ RSpec.describe SettingsHelper, :type => :helper do
 
   	it "return the minutes if rate limit negative points has been met" do
   		params = {
-  			"amount" => -5,
+  			"amount" => -1,
 
   		}
   		FactoryGirl.create(:setting, :key => "rate-limit", :value => "true", :school => @school)
-  		FactoryGirl.create(:setting, :key => "rate-limit-max-negative-points", :value => "1", :school => @school)
+  		FactoryGirl.create(:setting, :key => "rate-limit-max-negative-points", :value => "2", :school => @school)
   		FactoryGirl.create(:setting, :key => "rate-limit-negative-reset-minutes", :value => "5", :school => @school)
   		
   		val = SettingsHelper.check_rate_limit(params, @school, @staff)
+      params = {
+        "amount" => -10,
+
+      }
+      val = SettingsHelper.check_rate_limit(params, @school, @staff)
   		expect(val).to eq 5
   	end
   end
@@ -119,14 +129,14 @@ RSpec.describe SettingsHelper, :type => :helper do
   	end
 
   	it "returns true if require-student-points is false" do
-  		FactoryGirl.create(:setting, :key => "note-required", :value => "false", :school => @school)
+  		FactoryGirl.create(:setting, :key => "require-student-points", :value => "false", :school => @school)
   		
   		val = SettingsHelper.check_student_points(params, @school)
   		expect(val).to eq true
   	end
 
   	it "returns true if students are set" do
-  		FactoryGirl.create(:setting, :key => "note-required", :value => "true", :school => @school)
+  		FactoryGirl.create(:setting, :key => "require-student-points", :value => "true", :school => @school)
   		params = {
   			"member_ids" => ["1","2","3","4","5"]
   		}
@@ -135,12 +145,12 @@ RSpec.describe SettingsHelper, :type => :helper do
   	end
 
   	it "returns error if the students are missing" do
-  		FactoryGirl.create(:setting, :key => "note-required", :value => "true", :school => @school)
+  		FactoryGirl.create(:setting, :key => "require-student-points", :value => "true", :school => @school)
   		params = {
   			"member_ids" => []
   		}
   		val = SettingsHelper.check_student_points(params, @school)
-  		expect(val).to eq true
+  		expect(val).to eq "missing member_ids"
   	end
   end
 end 

@@ -70,7 +70,6 @@ module SettingsHelper
 	def self.check_student_points(params, school)
 		# see if we require they have the member_id set
 		if Setting.where(:school => school, :key => "require-student-points").exists?
-			puts "checking if student points are required and set"
 			setting = Setting.where(:school => school, :key => "require-student-points").first.value
 			if setting.downcase == "true"
 				# check the member id

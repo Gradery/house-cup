@@ -25,7 +25,7 @@ FactoryGirl.define do
   	factory :custom_point_assignment do
   		custom_points true
   		custom_points_title { Faker::Company.name }
-  		custom_points_amount { Faker::Number.number(10) }
+  		custom_points_amount { Faker::Number.number(2) }
   	end
   	factory :activity_assignment do
   		activity
