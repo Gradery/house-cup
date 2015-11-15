@@ -5,12 +5,12 @@ class RecalculateScoresWorker
   def perform()
   	schools = School.all
   	schools.each do |school|
-  		if Setting.where(:school => school, :key => "recalculate_scores_nightly").exists?
-  			setting = Setting.where(:school => school, :key => "recalculate_scores_nightly").first
+  		if Setting.where(:school => school, :key => "recalculate-scores-nightly").exists?
+  			setting = Setting.where(:school => school, :key => "recalculate-scores-nightly").first
   			if setting.value.downcase == "true" # recalculate scores
   				# see if they have a cutoff date for points
-  				if Setting.where(:school => school, :key => "recalculate_points_since").exists?
-  					temp = Setting.where(:school => school, :key => "recalculate_points_since").first
+  				if Setting.where(:school => school, :key => "recalculate-points-since").exists?
+  					temp = Setting.where(:school => school, :key => "recalculate-points-since").first
   					cutoff_date = DateTime.strptime(temp.value, '%D')
   				else
   					cutoff_date = DateTime.now - 100.years
