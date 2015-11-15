@@ -3,6 +3,7 @@ ActiveAdmin.register Member do
 permit_params :school_id, :house_id, :email, :name, :badge_id, :grade
 
 index do
+  selectable_column
 	column :house
 	column :name
   column :grade

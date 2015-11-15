@@ -11,6 +11,7 @@ show do
 end
 
 index do
+  selectable_column
 	column :name
 	column :points
   column (:school) {|activity| activity.school.name} if current_admin_user.school_id.nil?

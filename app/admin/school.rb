@@ -3,6 +3,7 @@ ActiveAdmin.register School do
   permit_params :name, :url, :about
 
   index do
+    selectable_column
   	column :name
   	actions
   end

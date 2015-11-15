@@ -6,6 +6,7 @@ ActiveAdmin.register House do
 permit_params :name, :color, :points, :school_id, :image
 
 index do
+  selectable_column
 	column :name
 	column :points
   column (:school) {|house| house.school.name} if current_admin_user.school_id.nil?

@@ -3,6 +3,7 @@ ActiveAdmin.register PointAssignment do
 permit_params :house_id, :staff_id, :activity_id, :school_id
 
 index do
+  selectable_column
 	column :staff
 	column :house
 	column :member if Setting.where(:school_id => current_admin_user.school_id, key: "track-student-points").exists? && Setting.where(:school_id => current_admin_user.school_id, key: "track-student-points").first.value.downcase == "true"
