@@ -72,6 +72,8 @@ gem 'unf'
 
 # Sidekiq for background jobs
 gem 'sidekiq'
+# Clockwork schedules jobs for us
+gem 'clockwork'
 # Sinatra needed for sidekiq web interface
 gem 'sinatra', :require => nil
 # Rubyzip to make zip file of PDFs for report generation
