@@ -1,0 +1,85 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="btn-group" role="group" aria-label="...">
+		  <a href="#staff" type="button" class="btn btn-default" data-bind="style: { 'background-color': selectedView() == 'staff' ? 'grey' : 'white' }">Staff</a>
+		  <a href="#members" type="button" class="btn btn-default" data-bind="style: { 'background-color': selectedView() == 'members' ? 'grey' : 'white' }">Students</a>
+		  <a href="#houses" type="button" class="btn btn-default" data-bind="style: { 'background-color': selectedView() == 'houses' ? 'grey' : 'white' }">Houses</a>
+		  <!-- <a href="#settings" type="button" class="btn btn-default" data-bind="style: { 'background-color': selectedView() == 'settings' ? 'grey' : 'white' }">Settings</a> -->
+		</div>
+	</div>
+</div>
+<br/>
+<br/>
+<div class="row">
+	<div class="col-md-3">
+		<div id="staffList" data-bind="visible: selectedView() == 'staff'">
+			<ul data-bind="foreach: staff" class="list-group">
+				<li class="list-group-item">
+					<a href="#" data-bind="text: email, attr: { href: '#staff/'+ id } "></a>
+				</li>
+			</ul>
+		</div>
+		<div id="membersList" data-bind="visible: selectedView() == 'members'">
+			<ul data-bind="foreach: members" class="list-group">
+				<li class="list-group-item">
+					<a href="#" data-bind="text: name, attr: { href: '#members/'+ id } "></a>
+				</li>
+			</ul>
+		</div>
+		<div id="housesList" data-bind="visible: selectedView() == 'houses'">
+			<ul data-bind="foreach: houses" class="list-group">
+				<li class="list-group-item">
+					<a href="#" data-bind="text: name, attr: { href: '#houses/'+ id } "></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div id="staffOverview" data-bind="visible: selectedSubView() == 'allStaff'">
+			This Page Coming Soon!
+		</div>
+		<div id="staffDetails" data-bind="with: selectedStaff, visible: selectedSubView() == 'specificStaff'">
+			Name: <span data-bind="text: name"></span><br/>
+			Email: <span data-bind="text: email"></span><br/>
+			House: <span data-bind="text: house"></span><br/>
+			Grade: <span data-bind="text: grade"></span><br/>
+		</div>
+		<div id="membersOverview" data-bind="visible: selectedSubView() == 'allMembers'">
+			<div class="col-md-6">
+				<h3>Top Students</h3>
+				<div data-bind="foreach: topMembers">
+					<h4 data-bind="text: name"></h4>
+					<ul data-bind="foreach: members">
+						<li>
+							<a href="#" data-bind="text: name + ' (' + badge_id+ ') - ' + points + ' points', attr: {href: '#members/'+id}"></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<h3>Bottom Students</h3>
+				<div data-bind="foreach: bottomMembers">
+					<h4 data-bind="text: name"></h4>
+					<ul data-bind="foreach: members">
+						<li>
+							<a href="#" data-bind="text: name + ' (' + badge_id+ ') - ' + points + ' points', attr: {href: '#members/'+id}"></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="housesOverview" data-bind="visible: selectedSubView() == 'allHouses'">
+			<h3>Current Score</h3>
+			<ul class="col-xs-12" data-bind="foreach: houses">
+				<li style="font-size: 20px;" data-bind="text: name + ': ' + points + ' points'">
+				</li>
+			</ul>
+		</div>
+		<div id="settingsOverview" data-bind="visible: selectedView() == 'settings'">
+			Coming Soon!
+		</div>
+	</div>
+</div>
+
+<%= javascript_include_tag "dashboard" %>

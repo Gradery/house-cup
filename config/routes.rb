@@ -16,7 +16,13 @@ Rails.application.routes.draw do
   get "/api/houses" => 'api#houses'
   get "/api/houses/activities" => 'api#house_points_by_activity'
   get "/api/staff" => 'api#staff'
+  get "/api/staff/:id" => 'api#specific_staff'
   get "/api/staff/activities" => 'api#staff_assignment_by_activity'
+  get "/api/members" => 'api#members'
+  get "/api/members/top" => 'api#top_members'
+  get "/api/members/bottom" => 'api#bottom_members'
+  get "/api/members/:id" => 'api#member'
+  get "/api/houses" => 'api#houses'
   get "/api/top_points" => 'api#top_points'
   post "/api/behavior_report" => "api#member_behavior_report"
 
