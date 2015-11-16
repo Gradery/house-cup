@@ -22,7 +22,7 @@
 		<div id="membersList" data-bind="visible: selectedView() == 'members'">
 			<ul data-bind="foreach: members" class="list-group">
 				<li class="list-group-item">
-					<a href="#" data-bind="text: name, attr: { href: '#members/'+ id } "></a>
+					<a href="#" data-bind="text: name + ' ('+ badge_id + ')', attr: { href: '#members/'+ id } "></a>
 				</li>
 			</ul>
 		</div>
