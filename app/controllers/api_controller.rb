@@ -65,7 +65,13 @@ class ApiController < ApplicationController
 		if current_admin_user.nil?
 			render json:{}, status: 400
 		else
-			@members = Member.includes(:house).where(:school_id => current_admin_user.school_id.to_s).all.sort_by{|h| h.name}
+			@members = Member.includes(:house).where(:school_id => current_admin_user.school_id.to_s).all.sort_by{|h| 
+				if h.name.nil?
+					h.badge_id
+				else
+					h.name
+				end
+			}
 		end
 	end
 

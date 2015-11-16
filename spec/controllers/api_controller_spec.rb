@@ -11,6 +11,8 @@ RSpec.describe ApiController, :type => :controller do
 			admin_user = FactoryGirl.create(:admin_user)
 			activity = FactoryGirl.create(:activity, :school => admin_user.school)
 			sign_in admin_user
+			@request.env["HTTP_ACCEPT"] = "application/json"
+ 			@request.env["CONTENT_TYPE"] = "application/json"
 			get :houses
 			expect(response.status).to eq 200
 		end
@@ -41,6 +43,8 @@ RSpec.describe ApiController, :type => :controller do
 			admin_user = FactoryGirl.create(:admin_user)
 			activity = FactoryGirl.create(:activity, :school => admin_user.school)
 			sign_in admin_user
+			@request.env["HTTP_ACCEPT"] = "application/json"
+ 			@request.env["CONTENT_TYPE"] = "application/json"
 			get :staff
 			expect(response.status).to eq 200
 		end
@@ -90,7 +94,7 @@ RSpec.describe ApiController, :type => :controller do
 			non_custom.save!
 			sign_in admin_user
 			get :top_points
-			expect(response.status).to eq 200
+			expect(response.status).to eq 200 
 		end
 	end
 
