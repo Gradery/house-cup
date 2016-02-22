@@ -42,6 +42,9 @@ set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/
 set :sidekiq_processes, 1
 set :sidekiq_role, [:sidekiq]
 set :sidekiq_options_per_process, ["--queue behavior_report -c 1"]
+set :rollbar_token, :rollbar_server_client_token
+set :rollbar_env, Proc.new { fetch :stage }
+set :rollbar_role, Proc.new { :app }
 
 namespace :deploy do
 
