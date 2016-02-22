@@ -54,7 +54,7 @@ $(document).ready(function(){
 
         $.get("/api/staff")
         .success(function(data){
-            console.log(data);
+            //console.log(data);
             self.staff.removeAll();
             for(var i = 0; i < data.staff.length; i++) {
                 self.staff.push(new Staff(data.staff[i]));
@@ -67,7 +67,7 @@ $(document).ready(function(){
                 self.selectedSubView("allStaff");
                 $.get("/api/staff")
                 .success(function(data){
-                    console.log(data);
+                    //console.log(data);
                     self.staff.removeAll();
                     for(var i = 0; i < data.staff.length; i++) {
                         self.staff.push(new Staff(data.staff[i]));
@@ -79,7 +79,7 @@ $(document).ready(function(){
                 self.selectedSubView("allStaff");
                 $.get("/api/staff")
                 .success(function(data){
-                    console.log(data);
+                    //console.log(data);
                     self.staff.removeAll();
                     for(var i = 0; i < data.staff.length; i++) {
                         self.staff.push(new Staff(data.staff[i]));
@@ -91,7 +91,7 @@ $(document).ready(function(){
                 self.selectedSubView("allMembers");
                 $.get("/api/members")
                 .success(function(data){
-                    console.log(data);
+                    //console.log(data);
                     self.members.removeAll();
                     for(var i = 0; i < data.members.length; i++) {
                         self.members.push(new Member(data.members[i]));
@@ -118,7 +118,7 @@ $(document).ready(function(){
                 self.selectedSubView("allHouses");
                 $.get("/api/houses")
                 .success(function(data){
-                    console.log(data);
+                    //console.log(data);
                     self.houses.removeAll();
                     for(var i = 0; i < data.length; i++) {
                         self.houses.push(new House(data[i]));
@@ -136,7 +136,7 @@ $(document).ready(function(){
                 $.get("/api/staff/" + this.params.staffId)
                 .success(function(data){
                     self.selectedStaff(new Staff(data));
-                    console.log(self.selectedStaff());
+                    //console.log(self.selectedStaff());
                 });
             });
         }).run();

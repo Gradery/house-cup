@@ -64,8 +64,8 @@ $(document).ready(function(){
     getStudents();
 
     $('.typeahead').on('typeahead:select', function(ev, suggestion) {
-      console.log('Selection: ' + suggestion);
-      console.log(ev);
+      //console.log('Selection: ' + suggestion);
+      //console.log(ev);
       id = suggestion.replace(")","").split("(")[1];
       //use the Badge ID to find the actual id and put them in the list of users
       for (var i = 0; i < suggestionDataRaw.length; i++)
@@ -73,7 +73,7 @@ $(document).ready(function(){
         if (suggestionDataRaw[i].badge_id === id)
         {
             //don't add the same student multiple times
-            console.log($("#member_" + suggestionDataRaw[i].id))
+            //console.log($("#member_" + suggestionDataRaw[i].id))
             if ($("#member_" + suggestionDataRaw[i].id).length === 0)
             {
                 $("#studentListSet").append("<div id='member_"+suggestionDataRaw[i].id+"'><a href='#' class='delete_member'><span class='glyphicon glyphicon-remove'>&nbsp;</span></a>"+suggestion+"</div>");
@@ -81,8 +81,8 @@ $(document).ready(function(){
 
                 $(".delete_member").click(function(e){
                     e.preventDefault();
-                    console.log("clicked to delete a member");
-                    console.log($(e.currentTarget).parent().attr("id"));
+                    //console.log("clicked to delete a member");
+                    //console.log($(e.currentTarget).parent().attr("id"));
                     $(e.currentTarget).parent().remove();
                     $("#"+$(e.currentTarget).parent().attr("id")).remove();
                 });
@@ -109,7 +109,7 @@ $(document).ready(function(){
                 toastr.success("Student Added!");
             })
             .error(function(error){
-                console.log(error);
+                //console.log(error);
                 toastr.error("ERROR: Couldn't add student. Please try again.")
             })
         }
@@ -120,7 +120,7 @@ function submitCustomPoints(){
     title = $("#title").val();
     amount = $("#amount").val();
     note = $("#note_custom").val();
-    console.log(house + " - " + title + " - " + amount);
+    //console.log(house + " - " + title + " - " + amount);
     var children = $("#studentListCustom").children();
     var members = [];
     for (var i = 0; i < children.length; i++)
@@ -156,7 +156,7 @@ function submitCustomPoints(){
             toastr.success("Points Submitted");
         })
         .error(function(error){
-            console.log(error);
+            //console.log(error);
             if (error.status == 400)
                 toastr.error(error.responseJSON.error);
             else
@@ -169,8 +169,8 @@ function submitSelectedPoints(){
     house = $(".act").attr("id");
     activityId = $("#activity").val();
     note = $("#note_list").val();
-    console.log(house + " - " + activityId + " - " + note);
-    console.log($("#studentListSet").children());
+    //console.log(house + " - " + activityId + " - " + note);
+    //console.log($("#studentListSet").children());
     var children = $("#studentListSet").children();
     var members = [];
     for (var i = 0; i < children.length; i++)
@@ -201,7 +201,7 @@ function submitSelectedPoints(){
         toastr.success("Points Submitted");
     })
     .error(function(error){
-        console.log(error);
+        //console.log(error);
         if (error.status == 400)
             toastr.error(error.responseJSON.error);
         else
@@ -213,7 +213,7 @@ function getStudents()
 {
     $.get("/students?house="+$(".act").attr("id"))
     .success(function(data){
-        console.log(data);
+        //console.log(data);
 
         suggestionDataRaw = data;
         suggestionData = [];
@@ -221,7 +221,7 @@ function getStudents()
         {
             suggestionData.push(data[i].name + " (" + data[i].badge_id + ")");
         }
-        console.log(suggestionData);
+        //console.log(suggestionData);
 
         var bh = new Bloodhound({
           datumTokenizer: Bloodhound.tokenizers.whitespace,
@@ -244,8 +244,8 @@ function getStudents()
         $(".tt-menu").css("background-color","white").css("padding","5px").css("border","2px solid black").css("border-radius","5px");
     })
     .error(function(data){
-        console.log("error!");
-        console.log(data);
+        //console.log("error!");
+        //console.log(data);
     })
 }
 
