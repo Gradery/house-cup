@@ -22,10 +22,11 @@ index do
     f.inputs "Staff Details" do
       f.input :name
       f.input :email
-      f.input :password if !resource.valid?
-      f.input :password_confirmation if !resource.valid?
-      f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all
-      f.input :grade, :collection => Setting.where(:school_id => current_admin_user.school_id.to_i, :key => "grades").first.value.split(",")
+      f.input :password
+      f.input :password_confirmation
+      f.input :house, :collection => House.where(:school_id => current_admin_user.school_id).all if !current_admin_user.school_id.nil?
+      f.input :house, :collection => House.all if current_admin_user.school_id.nil?
+      f.input :grade, :collection => Setting.where(:school_id => current_admin_user.school_id.to_i, :key => "grades").first.value.split(",") if !current_admin_user.school_id.nil?
       f.input :school, :collection => School.all if current_admin_user.school_id.nil?
     end
     f.actions
@@ -43,10 +44,12 @@ index do
 
   controller do
     def update
+      # don't try to update the password to blank if the password is blank.
       if params[:staff][:password].blank? && params[:staff][:password_confirmation].blank?
         params[:staff].delete("password")
         params[:staff].delete("password_confirmation")
       end
+      # set the staff school to the admin user's school if they are not a super admin.
       if !current_admin_user.school_id.nil?
         params[:staff][:school_id] = current_admin_user.school_id
       end
