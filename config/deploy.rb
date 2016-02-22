@@ -34,7 +34,7 @@ set :deploy_to, '/var/www'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :rvm_ruby_version, '2.2.1'
+set :rvm_ruby_version, '2.2.3'
 set :rails_env, 'production'
 set :normalize_asset_timestamps, %{public/images public/javascripts public/stylesheets}
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads' 'public/pdfs')
