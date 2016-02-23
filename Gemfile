@@ -81,7 +81,7 @@ gem 'sinatra', :require => nil
 gem 'rubyzip'
 
 # Rollbar for exception monitoring for JS and Ruby
-gem 'rollbar', '~> 2.2.1'
+gem 'rollbar'
 
 # Gems for Loggly
 gem 'syslogger', '~> 1.6.0'

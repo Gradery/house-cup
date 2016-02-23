@@ -9,6 +9,7 @@ Rollbar.configure do |config|
   if !Rails.env.production?
     config.enabled = false
   else # enable Rollbar.js
+    config.enabled = true
     config.js_enabled = true
     config.js_options = {
       accessToken: ENV['ROLLBAR_CLIENT_ACCESS_TOKEN'],
