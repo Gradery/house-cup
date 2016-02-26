@@ -7,7 +7,10 @@ box: ruby:2.3.0
 # You can also use services such as databases. Read more on our dev center:
 # http://devcenter.wercker.com/docs/services/index.html
 services:
-    - postgresql
+    - id: postgresql
+      env:
+       POSTGRES_PASSWORD: ourlittlesecret
+       POSTGRES_USER: myuser  # optional
     # http://devcenter.wercker.com/docs/services/postgresql.html
 
     # - mongodb
