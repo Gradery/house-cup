@@ -7,7 +7,7 @@ box: ruby:2.3.0
 # You can also use services such as databases. Read more on our dev center:
 # http://devcenter.wercker.com/docs/services/index.html
 services:
-    - postgres
+    - wercker/postgresql
     # http://devcenter.wercker.com/docs/services/postgresql.html
 
     # - mongodb
@@ -21,8 +21,8 @@ build:
     # Read more about steps on our dev center:
     # http://devcenter.wercker.com/docs/steps/index.html
     steps:
+        - rails-database-yml
         - bundle-install
-        - RAILS_ENV=test rake db:migrate
         - script:
             name: rspec
             code: bundle exec rspec
