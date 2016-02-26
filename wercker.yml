@@ -25,6 +25,7 @@ build:
     # http://devcenter.wercker.com/docs/steps/index.html
     steps:
         - rails-database-yml
+        - code: bundle config build.nokogiri --use-system-libraries
         - bundle-install
         - script:
             name: rspec
