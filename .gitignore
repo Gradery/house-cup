@@ -37,3 +37,4 @@ bower.json
 
 # Ignore fog.rb
 /config/initializers/fog.rb
+developmet.db

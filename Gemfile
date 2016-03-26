@@ -44,6 +44,7 @@ gem 'knockoutjs-rails' #KnockoutJS for Dashboard page
 
 # paperclip for file upload for logos
 gem 'paperclip'
+gem 'aws-sdk'
 
 # Twitter Bootstrap
 gem 'bootstrap-sass', '~> 3.3.4'
