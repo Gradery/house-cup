@@ -24,7 +24,7 @@ class House < ActiveRecord::Base
 	has_many :staff
 
 	has_attached_file :image, :default_url => "/img/:style/missing.png",
-				  :styles => {thumbnail: "1000x1000ß"},
+				  :styles => {thumbnail: "150x150>"},
                   :default_style => :thumbnail, 
                   :content_type => { :content_type => ["image/jpeg", "image/gif", "image/png"] }
   	validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
