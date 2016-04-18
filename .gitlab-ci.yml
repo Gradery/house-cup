@@ -21,24 +21,34 @@ install_dependencies:
 rspec_controllers:
   stage: test
   script:
+    - bundle install --path vendor/bundle
+    - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/controllers
 
 rspec_features:
   stage: test
   script:
+    - bundle install --path vendor/bundle
+    - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/features
 
 rspec_helpers:
   stage: test
   script:
+    - bundle install --path vendor/bundle
+    - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/helpers
 
 rspec_models:
   stage: test
   script:
+    - bundle install --path vendor/bundle
+    - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/models
 
 rspec_workers:
   stage: test
   script:
+    - bundle install --path vendor/bundle
+    - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/workers
