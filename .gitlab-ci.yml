@@ -1,13 +1,44 @@
 ---
 image: ruby:2.3.0
-before_script:
-  - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs wkhtmltopdf libmagickwand-dev
-  - ruby -v
-  - which ruby
-  - gem install bundler --no-ri --no-rdoc
 
-rspec:
+stages:
+  - build
+  - test
+
+install_dependencies:
+  stage: build
   script:
-    - bundle install
+    - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs wkhtmltopdf imagemagick libmagickwand-dev
+    - ruby -v
+    - which ruby
+    - gem install bundler --no-ri --no-rdoc
+    - bundle install --path vendor/bundle
     - bundle exec rake db:setup RAILS_ENV=test
-    - bundle exec rspec spec
+  artifacts:
+    paths:
+      - vendor/bundle
+
+rspec_controllers:
+  stage: test
+  script:
+    - bundle exec rspec spec/controllers
+
+rspec_features:
+  stage: test
+  script:
+    - bundle exec rspec spec/features
+
+rspec_helpers:
+  stage: test
+  script:
+    - bundle exec rspec spec/helpers
+
+rspec_models:
+  stage: test
+  script:
+    - bundle exec rspec spec/models
+
+rspec_workers:
+  stage: test
+  script:
+    - bundle exec rspec spec/workers
