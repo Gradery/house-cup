@@ -94,12 +94,12 @@ class BehaviorReportAdminWorker
       g.data(name, c)
     end
     image_file_name = "1-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
-    g.write("/tmp/" + image_file_name)
+    g.write("#{Rails.root.to_s}/tmp/" + image_file_name)
     # save file to S3
     if !Rails.env.test?
       file = Rails.configuration.s3_bucket.files.create(
     		:key => "house_cup/#{Rails.env}/"+image_file_name,
-    		:body => File.open("/tmp/" + image_file_name),
+    		:body => File.open("#{Rails.root.to_s}/tmp/" + image_file_name),
     		:public => true
     	)
       # delete the temp file

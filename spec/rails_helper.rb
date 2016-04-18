@@ -9,9 +9,9 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'devise'
 
-SimpleCov.start do
-  add_filter "/app/admin/"
-end
+#SimpleCov.start do
+#  add_filter "/app/admin/"
+#end
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
