@@ -15,12 +15,15 @@ install_dependencies:
     - bundle install --path vendor/bundle
     - bundle exec rake db:setup RAILS_ENV=test
   artifacts:
+    untracked: true
     paths:
       - vendor/bundle
 
 rspec_controllers:
   stage: test
   script:
+    - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs wkhtmltopdf imagemagick libmagickwand-dev redis-server
+    - service redis-server start
     - bundle install --path vendor/bundle
     - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/controllers
@@ -28,6 +31,7 @@ rspec_controllers:
 rspec_features:
   stage: test
   script:
+    - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs wkhtmltopdf imagemagick libmagickwand-dev
     - bundle install --path vendor/bundle
     - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/features
@@ -35,6 +39,7 @@ rspec_features:
 rspec_helpers:
   stage: test
   script:
+    - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs wkhtmltopdf imagemagick libmagickwand-dev
     - bundle install --path vendor/bundle
     - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/helpers
@@ -42,6 +47,7 @@ rspec_helpers:
 rspec_models:
   stage: test
   script:
+    - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs wkhtmltopdf imagemagick libmagickwand-dev
     - bundle install --path vendor/bundle
     - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/models
@@ -49,6 +55,8 @@ rspec_models:
 rspec_workers:
   stage: test
   script:
+    - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs wkhtmltopdf imagemagick libmagickwand-dev redis-server
+    - service redis-server start
     - bundle install --path vendor/bundle
     - bundle exec rake db:setup RAILS_ENV=test
     - bundle exec rspec spec/workers
