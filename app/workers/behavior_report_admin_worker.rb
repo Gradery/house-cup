@@ -4,7 +4,7 @@ class BehaviorReportAdminWorker
   def perform(member_id, admin_id)
     # make sure staff exists
     if AdminUser.where(:id => admin_id).exists?
-    	`mkdir /tmp/#{@jid}`
+    	`mkdir #{Rails.root.to_s}/tmp/#{@jid}`
     	current_admin = AdminUser.find(admin_id)
   		member = Member.find(member_id)
 			# get PointAssignments
@@ -34,18 +34,18 @@ class BehaviorReportAdminWorker
 	    )
   		kit = PDFKit.new(html, page_size: "Letter")
       # create the file in advance with a touch
-      `touch /tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf`
-   		kit.to_file("/tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf")
+      `touch #{Rails.root.to_s}/tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf`
+   		kit.to_file("#{Rails.root.to_s}/tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf")
 
   		# Send to the cloud
   		if !Rails.env.test?
         file = Rails.configuration.s3_bucket.files.create(
     			:key => "house_cup/#{Rails.env}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf",
-    			:body => File.open("/tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf"),
+    			:body => File.open("#{Rails.root.to_s}/tmp/#{@jid}/Full_Behavior_Report_#{member.name.gsub(',','').gsub(" ","_")}_#{Date.today.strftime('%m-%d-%y')}.pdf"),
     			:public => true
     		)
     		# remove the folder will all the pdfs in it
-    		`rm -R /tmp/#{@jid}`
+    		`rm -R #{Rails.root.to_s}/tmp/#{@jid}`
     		# send an email to the user with the download link
     		ReportMailer.email_admin(admin_id, member, file.public_url).deliver!
       end
@@ -103,7 +103,7 @@ class BehaviorReportAdminWorker
     		:public => true
     	)
       # delete the temp file
-      File.delete("/tmp/" + image_file_name)
+      File.delete("#{Rails.root.to_s}/tmp/" + image_file_name)
       return file.public_url
     else
       return "http://placehold.it/350x150"
@@ -167,16 +167,16 @@ class BehaviorReportAdminWorker
       g.data(name, c)
     end
     image_file_name = "2-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
-    g.write("/tmp/" + image_file_name)
+    g.write("#{Rails.root.to_s}/tmp/" + image_file_name)
     # save file to S3
     if !Rails.env.test?
       file = Rails.configuration.s3_bucket.files.create(
     		:key => "house_cup/#{Rails.env}/"+image_file_name,
-    		:body => File.open("/tmp/" + image_file_name),
+    		:body => File.open("#{Rails.root.to_s}/tmp/" + image_file_name),
     		:public => true
     	)
     	# delete the temp file
-    	File.delete("/tmp/" + image_file_name)
+    	File.delete("#{Rails.root.to_s}/tmp/" + image_file_name)
     	return file.public_url
     else
       return "http://placehold.it/350x150"
@@ -230,16 +230,16 @@ class BehaviorReportAdminWorker
     end
     g.data("points", totals)
     image_file_name = "3-"+DateTime.now.to_i.to_s+"-"+member_id.to_s+"-"+admin_id.to_s+".png"
-    g.write("/tmp/" + image_file_name)
+    g.write("#{Rails.root.to_s}/tmp/" + image_file_name)
     # save file to S3
     if !Rails.env.test?
       file = Rails.configuration.s3_bucket.files.create(
     		:key => "house_cup/#{Rails.env}/"+image_file_name,
-    		:body => File.open("/tmp/" + image_file_name),
+    		:body => File.open("#{Rails.root.to_s}/tmp/" + image_file_name),
     		:public => true
     	)
     	# delete the temp file
-    	File.delete("/tmp/" + image_file_name)
+    	File.delete("#{Rails.root.to_s}/tmp/" + image_file_name)
     	return file.public_url
     else
       return "http://placehold.it/350x150"
