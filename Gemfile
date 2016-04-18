@@ -122,4 +122,4 @@ group :production do
 end
 
 # CodeClimate test reporting
-#gem "codeclimate-test-reporter", group: :test, require: nil
+gem "codeclimate-test-reporter", group: :test, require: nil
