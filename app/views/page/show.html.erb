@@ -10,7 +10,7 @@
 <div class="row">
 <% i = 1
 @houses.each do |h| %>
-	<div class="col-xs-<%= 12/ @houses.count%>">
+	<div class="col-xs-<%= 12/ @houses.count%> <%= 'col-xs-offset-1' if @houses.count == 5 && i == 1 %>">
 		<center>
 			<img src="<%= h.image.url %>" class="img-responsive"/>
 			<% if @showHouseTextNames %>
@@ -25,7 +25,7 @@
 <div class="row">
 <% i = 1
 @houses.each do |h| %>
-	<div class="col-xs-<%= 12/ @houses.count%>">
+	<div class="col-xs-<%= 12/ @houses.count%> <%= 'col-xs-offset-1' if @houses.count == 5 && i == 1 %>">
 		<center>
 			<div id="score-<%= i %>" class="score">
 		    <div class="outer" style="height: 150px">
@@ -33,7 +33,11 @@
 		        </div>        
 		    </div>
 			</div>
-			<b class="score"><%= h.points%> Points</b>
+			<% if !@housePointsAsMoney %>
+				<b class="score"><%= number_with_delimiter(h.points)%> Points</b>
+			<% else %>
+				<b class="score"><%= number_to_currency(h.points, precision: 0)%></b>
+			<% end %>
 		</center>
 	</div>
 	<% i = i + 1 %>

@@ -18,6 +18,8 @@ class PageController < ApplicationController
 			render status: 404
 		else
 			set_house_term()
+
+			@housePointsAsMoney = SettingsHelper.house_points_as_money(@school)
 			# get the houses
 			@houses = House.where(:school_id => @school.id).to_a
 			# sort the houses

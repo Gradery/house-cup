@@ -85,4 +85,17 @@ module SettingsHelper
 			return true
 		end
 	end
+
+	def self.house_points_as_money(school)
+		if Setting.where(:school => school, :key => "house-points-as-money").exists?
+			setting = Setting.where(:school => school, :key => "house-points-as-money").first.value
+			if setting.downcase == "true"
+				return true
+			else
+				return false
+			end
+		else # default value is false
+			return false
+		end
+	end
 end
