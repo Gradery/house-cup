@@ -43,7 +43,7 @@ gem 'chart-js-rails' # for graphs
 gem 'knockoutjs-rails' #KnockoutJS for Dashboard page
 
 # paperclip for file upload for logos
-gem 'paperclip', '~> 4.2.1'
+gem 'paperclip', '~> 4.2.4'
 gem 'aws-sdk-v1'
 
 # Twitter Bootstrap
@@ -69,7 +69,7 @@ gem 'pdfkit'
 gem 'gruff'
 
 # Fog gem for file storage
-gem 'fog', '~> 1.34.0'
+#gem 'fog', '~> 1.34.0'
 gem 'unf'
 
 # Sidekiq for background jobs
