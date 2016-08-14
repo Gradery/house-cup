@@ -69,7 +69,7 @@ gem 'pdfkit'
 gem 'gruff'
 
 # Fog gem for file storage
-#gem 'fog', '~> 1.34.0'
+gem 'fog', '~> 1.34.0'
 gem 'unf'
 
 # Sidekiq for background jobs
