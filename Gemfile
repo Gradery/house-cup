@@ -43,7 +43,7 @@ gem 'chart-js-rails' # for graphs
 gem 'knockoutjs-rails' #KnockoutJS for Dashboard page
 
 # paperclip for file upload for logos
-gem 'paperclip'
+gem 'paperclip', '~> 4.2.1'
 gem 'aws-sdk-v1'
 
 # Twitter Bootstrap
