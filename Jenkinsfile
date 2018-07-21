@@ -8,7 +8,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'apt-get install curl bzip2 build-essential libssl-dev libreadline-dev zlib1g-dev'
+        sh 'apt-get update'
+        sh 'apt-get install -y build-essential'
         sh 'bundle install'
       }
     }
