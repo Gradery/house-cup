@@ -8,7 +8,12 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'echo "Worked"'
+        sh 'bundle install'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'rspec'
       }
     }
   }
