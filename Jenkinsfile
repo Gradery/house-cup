@@ -7,12 +7,6 @@ pipeline {
   }
   stages {
     stage('Build') {
-      agent {
-        docker {
-          image 'ruby:2.4'
-        }
-
-      }
       steps {
         sh 'echo "Worked"'
       }
